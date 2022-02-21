@@ -2,12 +2,12 @@ import pandas as pd
 import plotly.express as px  # (version 4.7.0 or higher)
 import plotly.graph_objects as go
 from dash import Dash, dcc, html, Input, Output, State, callback_context  # pip install dash (version 2.0.0 or higher)
+import flask
+
+server = flask.Flask(__name__)
 
 
-
-
-
-app = Dash(__name__)
+app = Dash(__name__, server=server)
 
 
 
@@ -49,6 +49,6 @@ def displayClick(btn1, btn2, btn3, btn4):
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    #app.run_server(debug=True)
+    app.run_server(debug=True)
 
-    app.run_server(debug=False, host='0.0.0.0', port=8080)
+    #app.run_server(debug=False, host='0.0.0.0', port=8080)

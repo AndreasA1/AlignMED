@@ -1,0 +1,23 @@
+To-Do list (non-ordered):
+
+Foundational:
+4) setup zeromq server communication between controller and dash
+5) make generalized control functions - in progress
+
+Necessary:
+2) write turn-on sequence - in progress
+    a) connect to MCP7 first (drive its reset high with rpi gpio)
+    b) drive reset pins (low then(?)) high
+    c) connect to each i2c chip
+    d) connect to each pressure sensor
+    - normalize pressures once started (assume they're all at atmosphere)
+    - try-excepts for i2c initializations
+3) setup interactive graph
+6) write automatic control script
+
+Ornamental:
+9) make everything pretty
+
+Latter-stage:
+7) overthrow the government
+8) get fucked up

@@ -19,8 +19,10 @@ class Controller:
         self.cell_states = np.zeros(shape=(2*n_cells,))
         self.cell_state_duration = np.zeros(shape=(2*n_cells,))
 
+
         # open file for data logging
         self.filename = f"logs/log_debug.csv"
+        '''
         # self.filename = f"logs/log_{time.time_ns()}.csv"
         # print(self.filename)
         self.fields = ["Time"]
@@ -31,10 +33,26 @@ class Controller:
             csvwriter = csv.writer(csvfile)
             # writing the fields
             csvwriter.writerow(self.fields)
+        '''
 
         # i2c bus
         self.i2c = busio.I2C(board.SCL, board.SDA)
-        self.setup_i2c()
+
+        # mcp and tca scaffolding
+        n_mcp = 8
+        n_mcp_gpio = 16
+        self.mcp = [None for i in range(n_mcp)]
+        self.mcp_pins = [[None for i in range(n_mcp_gpio)] for j in range(n_mcp)]
+        n_tca = 4
+        n_tca_i2c = 8
+        self.tca = [None for i in range(n_tca)]
+        self.tca_i2c = [[None for i in range(n_tca_i2c)] for j in range(n_tca)]
+
+        # init reset msp
+        self.setup_mcp(7)
+
+        # setup the rest of the main i2c devices
+        # self.setup_i2c()
 
     # gets pressure sensor values, formats into a row, and appends to log file
     def get_sensor_values(self):
@@ -58,13 +76,22 @@ class Controller:
             csvwriter.writerow(line)
 
     def setup_i2c(self):
-        # setup mcp expanders
-        try:
-            # mcp expander
-        except:
-            # try anyways
+        #whole function needs a rework
+        # 1- connect to all mcp's, drive outputs low
+        # 2- connect to all tca's
+        # 3- setup i2c lines on tca's
+
+
+
+
+
+        # setup mcp7
+        self.mcp0 = MCP23017(self.i2c, address=0x27)
+        self.mcp0_p0 = mcp0.get_pin(0)
+        self.mcp0_p0.switch_to_output(value=True)
 
         # drive reset pins high
+        self.mcp0_p0.value = True
 
         # setup tca objects
         self.tca1 = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70)
@@ -72,6 +99,23 @@ class Controller:
         # tie pressure sensors to tca i2c lines
         self.mpr1 = adafruit_mprls.MPRLS(self.tca1[1], psi_min=0, psi_max=25)
         return
+
+    def setup_mcp(self, mcp_id, n_pins=16):
+        self.mcp[mcp_id] = MCP23017(self.i2c, address=hex(20+mcp_id))
+        self.mcp_pins[mcp_id][0] = self.mcp[mcp_id][0].get_pin(0)
+        self.mcp_pins[mcp_id][0].switch_to_output(value=True)
+        self.mcp_pins[mcp_id][0].value = True
+
+        # if mcp_id == 7, drive all pins high
+
+    def setup_tca(self, tca_id, n_sensors=8):
+        self.tca[tca_id] = adafruit_tca9548a.TCA9548A(self.i2c, address=hex(70+tca_id))
+
+    def setup_mpr(self, sensor_id):
+        tca_id = sensor_id // 8
+        line_id = sensor_id % 4
+        # really not confident this will work
+        self.tca_i2c[tca_id][line_id] = adafruit_mprls.MPRLS(self.tca[tca_id][line_id], psi_min=0, psi_max=25)
 
 
 if __name__ == '__main__':

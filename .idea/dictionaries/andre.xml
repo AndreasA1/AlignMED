@@ -4,6 +4,7 @@
       <w>baudrate</w>
       <w>csvfile</w>
       <w>csvwriter</w>
+      <w>nclicks</w>
     </words>
   </dictionary>
 </component>

@@ -109,7 +109,8 @@ class Controller:
         return
 
     def setup_mcp(self, mcp_id, n_pins=16):
-        self.mcp[mcp_id] = MCP23017(self.i2c, address=hex(20+mcp_id))
+        mcp_init = MCP23017(self.i2c, address=hex(20+mcp_id))
+        self.mcp[mcp_id] = mcp_init
         self.mcp_pins[mcp_id][0] = self.mcp[mcp_id][0].get_pin(0)
         self.mcp_pins[mcp_id][0].switch_to_output(value=True)
         self.mcp_pins[mcp_id][0].value = True

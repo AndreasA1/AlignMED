@@ -59,11 +59,15 @@ class Controller:
         n_tca = 4
         n_tca_i2c = 8
         self.tca = [None for i in range(n_tca)]
-        self.tca_i2c = [[None for i in range(n_tca_i2c)] for j in range(n_tca)]
+        self.sensor_array = [[None for i in range(n_tca_i2c)] for j in range(n_tca)]
 
         # init reset msp
         self.setup_mcp(7)
 
+        self.setup_tca(0)
+
+        for i in range(8):
+            self.setup_mpr(i)
         # setup the rest of the main i2c devices
         # self.setup_i2c()
 
@@ -111,22 +115,31 @@ class Controller:
         return
 
     def setup_mcp(self, mcp_id, n_pins=16):
-        mcp_init = MCP23017(self.i2c, address=0x20+mcp_id)
-        self.mcp[mcp_id] = mcp_init
-        self.mcp_pins[mcp_id][0] = self.mcp[mcp_id].get_pin(0)
-        self.mcp_pins[mcp_id][0].switch_to_output(value=True)
-        self.mcp_pins[mcp_id][0].value = True
+        # mcp_init = MCP23017(self.i2c, address=0x20+mcp_id)
+        self.mcp[mcp_id] = MCP23017(self.i2c, address=0x20+mcp_id)
+        # self.mcp_pins[mcp_id][0] = self.mcp[mcp_id].get_pin(0)
+        # self.mcp_pins[mcp_id][0].switch_to_output(value=True)
+        # self.mcp_pins[mcp_id][0].value = True
 
-        # if mcp_id == 7, drive all pins high
+        # set all mcp pins to output and init them low/high
+        for i in range(n_pins):
+            self.mcp_pins[mcp_id][i] = self.mcp[mcp_id].get_pin(i)
+            self.mcp_pins[mcp_id][i].switch_to_output(value=True)
+
+            # if mcp_id == 7, drive all pins high (reset mcp)
+            if mcp_id == 7:
+                self.mcp_pins[mcp_id][i].value = True
+            else:
+                self.mcp_pins[mcp_id][i].value = False
 
     def setup_tca(self, tca_id, n_sensors=8):
-        self.tca[tca_id] = adafruit_tca9548a.TCA9548A(self.i2c, address=hex(70+tca_id))
+        self.tca[tca_id] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
 
     def setup_mpr(self, sensor_id):
         tca_id = sensor_id // 8
         line_id = sensor_id % 4
         # really not confident this will work
-        self.tca_i2c[tca_id][line_id] = adafruit_mprls.MPRLS(self.tca[tca_id][line_id], psi_min=0, psi_max=25)
+        self.sensor_array[tca_id][line_id] = adafruit_mprls.MPRLS(self.tca[tca_id][line_id], psi_min=0, psi_max=25)
 
     def receive_cmd(self):
         try:

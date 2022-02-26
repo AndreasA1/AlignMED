@@ -3,6 +3,9 @@ To-Do list (non-ordered):
 Foundational:
 4) setup zeromq server communication between controller and dash - design cmd string structure
 5) make generalized control functions - in progress, need testing
+    -mcp setup - verified
+    -tca setup - needs testing
+    -mpr setup - need to write
 
 Necessary:
 2) write turn-on sequence - in progress
@@ -19,5 +22,6 @@ Ornamental:
 9) make everything pretty
 
 Latter-stage:
+10) write script to reset chips if there is problem
 7) overthrow the government
 8) get fucked up

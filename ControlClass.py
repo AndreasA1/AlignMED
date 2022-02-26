@@ -12,6 +12,8 @@ import adafruit_mprls # pressure sensor library
 import sys
 import zmq
 
+from time import sleep
+
 
 class Controller:
     def __init__(self, n_cells):
@@ -48,7 +50,6 @@ class Controller:
 
         # i2c bus
         self.i2c = busio.I2C(board.SCL, board.SDA)
-        print(f"i2c type: {type(self.i2c)}")
 
         # mcp and tca scaffolding
         n_mcp = 8
@@ -112,7 +113,7 @@ class Controller:
     def setup_mcp(self, mcp_id, n_pins=16):
         mcp_init = MCP23017(self.i2c, address=0x20+mcp_id)
         self.mcp[mcp_id] = mcp_init
-        self.mcp_pins[mcp_id][0] = self.mcp[mcp_id][0].get_pin(0)
+        self.mcp_pins[mcp_id][0] = self.mcp[mcp_id].get_pin(0)
         self.mcp_pins[mcp_id][0].switch_to_output(value=True)
         self.mcp_pins[mcp_id][0].value = True
 
@@ -142,6 +143,10 @@ if __name__ == '__main__':
     print("we controlling")
     num_cells = 4
     con = Controller(num_cells)
+
+    while True:
+        sleep(1)
+
 
     # while True:
     # cycle through stuff here

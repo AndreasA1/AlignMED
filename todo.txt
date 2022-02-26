@@ -1,8 +1,8 @@
 To-Do list (non-ordered):
 
 Foundational:
-4) setup zeromq server communication between controller and dash
-5) make generalized control functions - in progress
+4) setup zeromq server communication between controller and dash - design cmd string structure
+5) make generalized control functions - in progress, need testing
 
 Necessary:
 2) write turn-on sequence - in progress

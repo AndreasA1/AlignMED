@@ -9,6 +9,9 @@ from adafruit_mcp230xx.mcp23017 import MCP23017 #I/O expander library
 import adafruit_tca9548a # i2c expander library
 import adafruit_mprls # pressure sensor library
 
+import sys
+import zmq
+
 
 class Controller:
     def __init__(self, n_cells):
@@ -19,6 +22,14 @@ class Controller:
         self.cell_states = np.zeros(shape=(2*n_cells,))
         self.cell_state_duration = np.zeros(shape=(2*n_cells,))
 
+        '''
+        # zmq setup
+        context = zmq.Context()
+        self.socket = context.socket(zmq.SUB)
+        self.socket.connect("tcp://127.0.0.1:6000")
+        cmd_filter = "cmd"
+        self.socket.setsockopt_string(zmq.SUBSCRIBE, cmd_filter)
+        '''
 
         # open file for data logging
         self.filename = f"logs/log_debug.csv"
@@ -76,13 +87,10 @@ class Controller:
             csvwriter.writerow(line)
 
     def setup_i2c(self):
-        #whole function needs a rework
+        # whole function needs a rework
         # 1- connect to all mcp's, drive outputs low
         # 2- connect to all tca's
         # 3- setup i2c lines on tca's
-
-
-
 
 
         # setup mcp7
@@ -117,8 +125,21 @@ class Controller:
         # really not confident this will work
         self.tca_i2c[tca_id][line_id] = adafruit_mprls.MPRLS(self.tca[tca_id][line_id], psi_min=0, psi_max=25)
 
+    def receive_cmd(self):
+        try:
+            cmd = self.socket.recv(flags=zmq.NOBLOCK)
+            c = cmd.split()  # put fields here that we want
+            print(cmd)
+            return cmd
+        except zmq.Again as e:
+            print("no cmd received")
+            return 0
+
 
 if __name__ == '__main__':
     print("we controlling")
     num_cells = 4
     con = Controller(num_cells)
+
+    # while True:
+    # cycle through stuff here

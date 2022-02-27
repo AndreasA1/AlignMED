@@ -1,11 +1,16 @@
 To-Do list (non-ordered):
 
 Foundational:
-4) setup zeromq server communication between controller and dash - design cmd string structure
+4) setup zeromq server communication between controller and dash
+    - setup sub in control class - written
+    - add pub in dash, put in callbacks
+    - need to make sure they can talk to each other
 5) make generalized control functions - in progress, need testing
     -mcp setup - verified
-    -tca setup - needs testing
-    -mpr setup - need to write
+    -tca setup - verified
+    -mpr setup - verified
+    -open/close valve command - need to write
+    -get sensor values function - need to test
 
 Necessary:
 2) write turn-on sequence - in progress
@@ -23,5 +28,6 @@ Ornamental:
 
 Latter-stage:
 10) write script to reset chips if there is problem
+11) add try-excepts to all component calls
 7) overthrow the government
 8) get fucked up

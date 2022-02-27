@@ -76,16 +76,17 @@ class Controller:
     def get_sensor_values(self):
         line = [time.time_ns()]
         for i in range(self.n_cells):
-            value = 1.0  # call pressure_val(i)
+            value = self.pressure_val(i)  # call pressure_val(i)
             line.append(value)
+            print(line)
             self.log_data(line)
 
     # gets the value for one pressure sensor
     def pressure_val(self, sensor_id):
-        try:
-            return 1.0
-        except:
-            return 1.0
+        tca_id = sensor_id // 8
+        line_id = sensor_id % 4
+        value = self.sensor_array[tca_id][line_id].pressure
+        return value
 
     # logs a line of data to the log file
     def log_data(self, line):
@@ -93,6 +94,7 @@ class Controller:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(line)
 
+    # whole function is a mess
     def setup_i2c(self):
         # whole function needs a rework
         # 1- connect to all mcp's, drive outputs low
@@ -116,11 +118,7 @@ class Controller:
         return
 
     def setup_mcp(self, mcp_id, n_pins=16):
-        # mcp_init = MCP23017(self.i2c, address=0x20+mcp_id)
         self.mcp[mcp_id] = MCP23017(self.i2c, address=0x20+mcp_id)
-        # self.mcp_pins[mcp_id][0] = self.mcp[mcp_id].get_pin(0)
-        # self.mcp_pins[mcp_id][0].switch_to_output(value=True)
-        # self.mcp_pins[mcp_id][0].value = True
 
         # set all mcp pins to output and init them low/high
         for i in range(n_pins):
@@ -145,12 +143,19 @@ class Controller:
     def receive_cmd(self):
         try:
             cmd = self.socket.recv(flags=zmq.NOBLOCK)
-            c = cmd.split()  # put fields here that we want
+            flavor, cell, state, duration = cmd.split()  # put fields here that we want
+            # flavor=type of command: direct, pressure
+            # cell=cell id
+            # state = 0-> nothing, 1-> fill, 2-> empty, or pressure value for pressure control
+            # duration = time length of command
             print(cmd)
-            return cmd
+            return flavor, int(cell), float(state), float(duration)
         except zmq.Again as e:
             print("no cmd received")
-            return 0
+            return "empty"
+
+    def actuate(self):
+        return
 
 
 if __name__ == '__main__':
@@ -160,7 +165,6 @@ if __name__ == '__main__':
 
     while True:
         sleep(1)
-
 
     # while True:
     # cycle through stuff here

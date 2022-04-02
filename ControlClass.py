@@ -38,6 +38,7 @@ class Controller:
         '''
         # self.filename = f"logs/log_{time.time_ns()}.csv"
         # print(self.filename)
+        '''
         self.fields = ["Time"]
         for i in range(num_cells):
             self.fields.append(f"Cell {i+1}")
@@ -46,23 +47,25 @@ class Controller:
             csvwriter = csv.writer(csvfile)
             # writing the fields
             csvwriter.writerow(self.fields)
-        '''
+
 
         # i2c bus
         self.i2c = busio.I2C(board.SCL, board.SDA)
 
         # mcp and tca scaffolding
+        '''
         n_mcp = 8
         n_mcp_gpio = 16
         self.mcp = [None for i in range(n_mcp)]
         self.mcp_pins = [[None for i in range(n_mcp_gpio)] for j in range(n_mcp)]
-        n_tca = 4
+        '''
+        n_tca = 1
         n_tca_i2c = 8
         self.tca = [None for i in range(n_tca)]
         self.sensor_array = [[None for i in range(n_tca_i2c)] for j in range(n_tca)]
 
         # init reset msp
-        self.setup_mcp(7)
+        #self.setup_mcp(7)
 
         self.setup_tca(0)
 
@@ -93,7 +96,8 @@ class Controller:
         with open(self.filename, 'a', newline='') as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(line)
-
+            csvwriter.flush
+    '''
     # whole function is a mess
     def setup_i2c(self):
         # whole function needs a rework
@@ -116,7 +120,7 @@ class Controller:
         # tie pressure sensors to tca i2c lines
         self.mpr1 = adafruit_mprls.MPRLS(self.tca1[1], psi_min=0, psi_max=25)
         return
-
+    '''
     def setup_mcp(self, mcp_id, n_pins=16):
         self.mcp[mcp_id] = MCP23017(self.i2c, address=0x20+mcp_id)
 
@@ -160,7 +164,7 @@ class Controller:
 
 if __name__ == '__main__':
     print("we controlling")
-    num_cells = 4
+    num_cells = 2
     con = Controller(num_cells)
 
     while True:

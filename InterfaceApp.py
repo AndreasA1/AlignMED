@@ -19,6 +19,8 @@ context = zmq.Context()
 socket = context.socket(zmq.PUB)
 socket.bind("tcp://127.0.0.1:6000")
 
+controller = ControlClass.Controller(2)
+
 
 def heat_map(num_rows, num_columns):
     df = pd.read_csv("logs/log_debug.csv") # log_test has 16 cells
@@ -112,4 +114,4 @@ if __name__ == '__main__':
 
     # app.run_server(debug=False, host='0.0.0.0', port=8080)
 
-    controller = ControlClass.Controller(n_cells)
+

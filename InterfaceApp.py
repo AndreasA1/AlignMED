@@ -9,6 +9,8 @@ import numpy as np
 from time import sleep
 from random import randrange
 
+import ControlClass
+
 server = flask.Flask(__name__)
 app = Dash(__name__, server=server)
 
@@ -19,10 +21,11 @@ socket.bind("tcp://127.0.0.1:6000")
 
 
 def heat_map(num_rows, num_columns):
-    df = pd.read_csv("logs/log_test.csv")
+    df = pd.read_csv("logs/log_debug.csv") # log_test has 16 cells
     df_list = df.values.tolist()[-1][1:]
+    num_cells = num_columns * num_rows
+    df_list = df_list[:num_cells]
 
-    num_cells = num_columns*num_rows
     cells = []
     for i in range(num_cells):
         cells.append(f"Cell {i+1}")
@@ -93,6 +96,7 @@ def cmd_fun(cell_id, state, duration, btn):
 @app.callback(Output('live-pressure-graph', 'figure'),
               Input('interval-component', 'n_intervals'))
 def update_graph_live(n):
+    controller.get_sensor_values()
     fig = heat_map(n_rows, n_columns)
     return fig
 
@@ -101,8 +105,11 @@ def update_graph_live(n):
 if __name__ == '__main__':
     n_rows = 1
     n_columns = 2
+    n_cells = n_rows*n_columns
 
     # if debug is set to True, zmq won't work
     app.run_server(debug=False, host='127.0.0.1', port=8080)
 
     # app.run_server(debug=False, host='0.0.0.0', port=8080)
+
+    controller = ControlClass.Controller(n_cells)

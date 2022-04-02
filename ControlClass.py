@@ -40,7 +40,7 @@ class Controller:
         # print(self.filename)
         '''
         self.fields = ["Time"]
-        for i in range(num_cells):
+        for i in range(n_cells):
             self.fields.append(f"Cell {i+1}")
         with open(self.filename, 'w', newline='') as csvfile:
             # creating a csv writer object

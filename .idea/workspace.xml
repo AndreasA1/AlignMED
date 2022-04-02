@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="436b0288-efd2-4c4b-99b3-8957bf1263fb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/InterfaceApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/InterfaceApp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ControlClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/ControlClass.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,11 +21,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ControlClass.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1392">
-              <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
+            <state relative-caret-position="359">
+              <caret line="42" column="24" lean-forward="true" selection-start-line="42" selection-start-column="24" selection-end-line="42" selection-end-column="24" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -45,7 +45,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/InterfaceApp.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="357">
@@ -156,8 +156,8 @@
         <option value="$PROJECT_DIR$/Old Scripts/SerialTest.py" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_6.py" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_7.py" />
-        <option value="$PROJECT_DIR$/ControlClass.py" />
         <option value="$PROJECT_DIR$/InterfaceApp.py" />
+        <option value="$PROJECT_DIR$/ControlClass.py" />
       </list>
     </option>
   </component>
@@ -389,7 +389,7 @@
     <editor active="true" />
     <layout>
       <window_info id="DB Browser" order="0" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.24966975" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.24966975" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="DB Diagnostics" order="0" />
@@ -402,7 +402,7 @@
       <window_info anchor="bottom" id="Inspection" order="7" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.32904148" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32904148" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.1988555" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.1988555" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5006605" side_tool="true" weight="0.2956153" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32904148" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -593,22 +593,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ControlClass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1392">
-          <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/InterfaceApp.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="21" column="38" selection-start-line="21" selection-start-column="38" selection-end-line="21" selection-end-column="38" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ControlClass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="42" column="24" lean-forward="true" selection-start-line="42" selection-start-column="24" selection-end-line="42" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>

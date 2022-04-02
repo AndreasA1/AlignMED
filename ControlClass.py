@@ -96,7 +96,6 @@ class Controller:
         with open(self.filename, 'a', newline='') as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(line)
-            csvwriter.flush()
     '''
     # whole function is a mess
     def setup_i2c(self):

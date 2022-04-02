@@ -69,7 +69,7 @@ class Controller:
 
         self.setup_tca(0)
 
-        for i in range(8):
+        for i in range(n_cells):
             print(f"mpr: {i}")
             self.setup_mpr(i)
         # setup the rest of the main i2c devices

@@ -9,7 +9,11 @@ import numpy as np
 from time import sleep
 from random import randrange
 
-import ControlClass
+testing = True
+
+if not testing:
+    import ControlClass
+    controller = ControlClass.Controller(2)
 
 server = flask.Flask(__name__)
 app = Dash(__name__, server=server)
@@ -19,29 +23,61 @@ context = zmq.Context()
 socket = context.socket(zmq.PUB)
 socket.bind("tcp://127.0.0.1:6000")
 
-controller = ControlClass.Controller(2)
 
-
-def heat_map(num_rows, num_columns):
-    df = pd.read_csv("logs/log_debug.csv") # log_test has 16 cells
+def heat_map(num_rows, num_columns, num_cells):
+    if testing:
+        df = pd.read_csv("logs/log_test.csv")
+    else:
+        df = pd.read_csv("logs/log_debug.csv")  # log_test has 16 cells
     df_list = df.values.tolist()[-1][1:]
-    num_cells = num_columns * num_rows
     df_list = df_list[:num_cells]
+
+    ps_for_hm = []
+    for i in range(num_cells):
+        ps_for_hm.append(df_list[i])
+        if ((i+1) % 10 == 1) or ((i+1) % 10 == 0):
+            ps_for_hm.append(df_list[i])
+            ps_for_hm.append(df_list[i])
+            ps_for_hm.append(df_list[i])
+            ps_for_hm.append(df_list[i])
+        elif (i+1) % 10 == 5:
+            ps_for_hm.append(df_list[i+4])
+            ps_for_hm.append(df_list[i-3])
 
     cells = []
     for i in range(num_cells):
         cells.append(f"Cell {i+1}")
+        if ((i+1) % 10 == 1) or ((i+1) % 10 == 0):
+            cells.append(f"Cell {i+1}")
+            cells.append(f"Cell {i+1}")
+            cells.append(f"Cell {i+1}")
+            cells.append(f"Cell {i+1}")
+        elif (i+1) % 10 == 5:
+            cells.append(f"Cell {(i+1)+4}")
+            cells.append(f"Cell {(i+1)-3}")
+
     cells = list(reversed(np.reshape(cells, (num_rows, num_columns)).tolist()))
-    pressures = list(reversed(np.reshape(df_list, (num_rows, num_columns)).tolist()))
+    pressures = list(reversed(np.reshape(ps_for_hm, (num_rows, num_columns)).tolist()))
 
     fig = go.Figure(data=go.Heatmap(z=pressures,
-                                    colorscale=[[0, 'rgb(0,255,0)'], [1, 'rgb(255,0,0)']],
+                                    colorscale=[[0, 'rgb(43,216,43)'], [1, 'rgb(255,0,0)']],
                                     customdata=cells,
                                     hovertemplate="%{customdata}<br>" +
                                                   "Pressure: %{z}<extra></extra>",
                                     zmin=14.5
                                     ))
-    fig.update_layout(title_text='Pressure Map', width=700, height=700)
+    fig.update_layout(title_text='Pressure Map', width=125*n_columns, height=70*n_rows)
+    return fig
+
+
+def time_series(cell_id=2):
+    if testing:
+        df = pd.read_csv("logs/log_test.csv")
+    else:
+        df = pd.read_csv("logs/log_debug.csv")
+
+    fig = px.scatter(df, x="Time", y=f"Cell {cell_id}")
+    fig.update_traces(mode='lines+markers')
     return fig
 
 
@@ -49,12 +85,17 @@ def heat_map(num_rows, num_columns):
 # App layout
 app.layout = html.Div([
     html.Div(children=[
-        dcc.Graph(id='live-pressure-graph'),
+        dcc.Graph(id='live-pressure-graph',
+                  hoverData={'points'}),
 
         dcc.Interval(
             id='interval-component',
             interval=1 * 1000,  # in milliseconds
             n_intervals=0),
+    ], style={'padding': 10, 'flex': 1}),
+
+    html.Div([
+        dcc.Graph(id='pressure-time-series-graph')
     ], style={'padding': 10, 'flex': 1}),
 
     html.Div(children=[
@@ -77,7 +118,7 @@ app.layout = html.Div([
 ], style={'display': 'flex', 'flex-direction': 'row'})
 
 
-# sends commands based on entry fields
+# sends command based on entry fields
 @app.callback(
     Output('container-last-cmd', 'children'),
     Input('cell-id', 'value'),
@@ -90,24 +131,45 @@ def cmd_fun(cell_id, state, duration, btn):
     if 'btn-send-cmd' in changed_id:
         cmd = f"cmd {cell_id} {state} {duration}"
         print(cmd)
-        socket.send_string(cmd)
+
+        # socket.send_string(cmd)
+
+        # or
+        if not testing:
+            controller.actuate_duration(cell_id, state, duration)
+        else:
+            print(cell_id, state, duration)
         return html.Div(cmd)
 
 
-# Multiple components can update everytime interval gets fired.
+# Update live pressure map
 @app.callback(Output('live-pressure-graph', 'figure'),
               Input('interval-component', 'n_intervals'))
 def update_graph_live(n):
-    controller.get_sensor_values()
-    fig = heat_map(n_rows, n_columns)
+    if not testing:
+        controller.get_sensor_values()
+    fig = heat_map(n_rows, n_columns, n_cells)
+    return fig
+
+
+# Update time series line graph
+@app.callback(Output('pressure-time-series-graph', 'figure'),
+              Input('live-pressure-graph', 'hoverData'),
+              Input('interval-component', 'n_intervals'))
+def update_time_series(hoverData):
+    x = hoverData['points'][0]['x']
+    y = 11-hoverData['points'][0]['y']
+    box_id = x+y*n_columns
+    cell_ids = [1, 1, 1, 1, 1, 2, 3, 4, 5, 9, 2, 6, 7, 8, 9, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 12, 13, 14, 15, 19, 12, 16, 17, 18, 19, 20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 22, 23, 24, 25, 29, 22, 26, 27, 28, 29, 30, 30, 30, 30, 30]
+    fig = time_series(cell_ids[box_id])
     return fig
 
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    n_rows = 1
-    n_columns = 2
-    n_cells = n_rows*n_columns
+    n_rows = 12
+    n_columns = 5
+    n_cells = 30
 
     # if debug is set to True, zmq won't work
     app.run_server(debug=False, host='127.0.0.1', port=8080)

@@ -20,8 +20,11 @@ Necessary:
     d) connect to each pressure sensor
     - normalize pressures once started (assume they're all at atmosphere)
     - try-excepts for i2c initializations
-3) setup interactive graph
+3) setup interactive graph - done
 6) write automatic control script
+7) write "fill all cells" button and corresponding control function
+8) have control class only append to file at the start and then set up a button that clears inherited data from log file
+9) fix time series graph, add hovering - done
 
 Ornamental:
 9) make everything pretty

@@ -157,7 +157,49 @@ class Controller:
             print("no cmd received")
             return "empty"
 
-    def actuate(self):
+    def receive_actuate_cmd(self):
+        return
+
+    def actuate_duration(self, cell_id, state, duration):
+        # get solenoid id
+        solenoid_id = (cell_id-1)*2 + state
+        # get mcp id
+        mcp_id = cell_id // 8
+        # get mcp pin controlling solenoid
+        mcp_pin = solenoid_id % 16
+        # set mcp pin to high
+        self.mcp_pins[mcp_id][mcp_pin].value = True
+        # sleep for the duration
+        sleep(duration)
+        # set mcp pin to low
+        self.mcp_pins[mcp_id][mcp_pin].value = False
+        return
+
+    def actuate_pressure(self, cell_id, pressure):
+        mcp_id = cell_id // 8
+        start = time.time()
+        # if desired pressure is greater than current pressure
+        if pressure > self.pressure_val(cell_id):
+            # get mcp pin
+            mcp_pin = ((cell_id-1) % 8) * 2
+            # open solenoid valve
+            self.mcp_pins[mcp_id][mcp_pin].value = True
+            while (self.pressure_val(cell_id) > pressure) and (time.time()-start < 4):
+                sleep(0.1)
+            self.mcp_pins[mcp_id][mcp_pin].value = False
+        else:
+            # get mcp pin
+            mcp_pin =(cell_id % 8) * 2 - 1
+            # open solenoid valve
+            self.mcp_pins[mcp_id][mcp_pin].value = True
+            while (self.pressure_val(cell_id) > pressure) and (time.time()-start < 4):
+                sleep(0.1)
+            self.mcp_pins[mcp_id][mcp_pin].value = False
+        return
+
+    def fill_all_cells(self):
+        for i in range(self.n_cells):
+            self.actuate_pressure(i+1, 16.00)
         return
 
 

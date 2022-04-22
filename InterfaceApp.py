@@ -9,7 +9,7 @@ import numpy as np
 from time import sleep
 from random import randrange
 
-testing = True
+testing = False
 n_cells = 30
 
 if not testing:

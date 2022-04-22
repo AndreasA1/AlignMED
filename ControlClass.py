@@ -73,6 +73,8 @@ class Controller:
         # # set up the rest of the main i2c devices
         # # self.setup_i2c()
 
+        print("success")
+
     def init_log_file(self):
         fields = ["Time"]
         for i in range(self.n_cells):

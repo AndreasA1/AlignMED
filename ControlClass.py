@@ -156,7 +156,10 @@ class Controller:
         tca_id = sensor_id // 8
         line_id = sensor_id % 4
         # really not confident this will work
-        self.sensor_array[tca_id][line_id] = adafruit_mprls.MPRLS(self.tca[tca_id][line_id], psi_min=0, psi_max=25)
+        try:
+            self.sensor_array[tca_id][line_id] = adafruit_mprls.MPRLS(self.tca[tca_id][line_id], psi_min=0, psi_max=25)
+        except:
+            print(f"Sensor # {sensor_id} not working")
 
     def receive_cmd(self):
         try:

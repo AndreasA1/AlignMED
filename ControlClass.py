@@ -154,7 +154,7 @@ class Controller:
 
     def setup_mpr(self, sensor_id):
         tca_id = sensor_id // 8
-        line_id = sensor_id % 4
+        line_id = sensor_id % 8
         print(sensor_id, tca_id, line_id)
         # really not confident this will work
         try:

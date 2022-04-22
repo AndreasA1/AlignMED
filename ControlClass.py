@@ -142,9 +142,9 @@ class Controller:
             self.mcp_pins[mcp_id][i] = self.mcp[mcp_id].get_pin(i)
             self.mcp_pins[mcp_id][i].switch_to_output(value=True)
 
-            # if mcp_id == 7, drive all pins high (reset mcp)
+            # if mcp_id == 7 4 or 5, drive all pins high (reset and sensor mcp's
             # else drive all pins low
-            if mcp_id == 7:
+            if (mcp_id == 7) or (mcp_id == 4) or (mcp_id == 5):
                 self.mcp_pins[mcp_id][i].value = True
             else:
                 self.mcp_pins[mcp_id][i].value = False

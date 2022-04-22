@@ -155,6 +155,7 @@ class Controller:
     def setup_mpr(self, sensor_id):
         tca_id = sensor_id // 8
         line_id = sensor_id % 4
+        print(sensor_id, tca_id, line_id)
         # really not confident this will work
         try:
             self.sensor_array[tca_id][line_id] = adafruit_mprls.MPRLS(self.tca[tca_id][line_id], psi_min=0, psi_max=25)

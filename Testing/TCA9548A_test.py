@@ -14,33 +14,33 @@ i2c = busio.I2C(board.SCL, board.SDA)
 # create tca object
 tca1 = adafruit_tca9548a.TCA9548A(i2c, address=0x70)
 
-mcp = MCP23017(i2c, address=0x24)
-mcp0 = mcp.get_pin(0)
-mcp1 = mcp.get_pin(1)
-mcp2 = mcp.get_pin(2)
-mcp3 = mcp.get_pin(3)
-mcp4 = mcp.get_pin(4)
-mcp5 = mcp.get_pin(5)
-mcp6 = mcp.get_pin(6)
-mcp7 = mcp.get_pin(7)
-
-mcp0.switch_to_output(value=True)
-mcp1.switch_to_output(value=True)
-mcp2.switch_to_output(value=True)
-mcp3.switch_to_output(value=True)
-mcp4.switch_to_output(value=True)
-mcp5.switch_to_output(value=True)
-mcp6.switch_to_output(value=True)
-mcp7.switch_to_output(value=True)
-
-mcp0.value = True
-mcp1.value = True
-mcp2.value = True
-mcp3.value = True
-mcp4.value = True
-mcp5.value = True
-mcp6.value = True
-mcp7.value = True
+# mcp = MCP23017(i2c, address=0x24)
+# mcp0 = mcp.get_pin(0)
+# mcp1 = mcp.get_pin(1)
+# mcp2 = mcp.get_pin(2)
+# mcp3 = mcp.get_pin(3)
+# mcp4 = mcp.get_pin(4)
+# mcp5 = mcp.get_pin(5)
+# mcp6 = mcp.get_pin(6)
+# mcp7 = mcp.get_pin(7)
+#
+# mcp0.switch_to_output(value=True)
+# mcp1.switch_to_output(value=True)
+# mcp2.switch_to_output(value=True)
+# mcp3.switch_to_output(value=True)
+# mcp4.switch_to_output(value=True)
+# mcp5.switch_to_output(value=True)
+# mcp6.switch_to_output(value=True)
+# mcp7.switch_to_output(value=True)
+#
+# mcp0.value = True
+# mcp1.value = True
+# mcp2.value = True
+# mcp3.value = True
+# mcp4.value = True
+# mcp5.value = True
+# mcp6.value = True
+# mcp7.value = True
 
 try:
     mpr1 = adafruit_mprls.MPRLS(tca1[0], psi_min=0, psi_max=25)

@@ -183,17 +183,21 @@ class Controller:
 
     def actuate_duration(self, cell_id, state, duration):
         # get solenoid id
+        print("actuating")
         solenoid_id = (cell_id-1)*2 + state
         # get mcp id
         mcp_id = cell_id // 8
+        print(f"mcp id: {mcp_id}")
         # get mcp pin controlling solenoid
         mcp_pin = solenoid_id % 16
+        print(f"mcp_pin: {mcp_pin}")
         # set mcp pin to high
         self.mcp_pins[mcp_id][mcp_pin].value = True
         # sleep for the duration
         sleep(duration)
         # set mcp pin to low
         self.mcp_pins[mcp_id][mcp_pin].value = False
+        print("done")
         return
 
     def actuate_pressure(self, cell_id, pressure):

@@ -39,41 +39,55 @@ class Controller:
         # self.filename = f"logs/log_{time.time_ns()}.csv"
         # print(self.filename)
         '''
-        self.fields = ["Time"]
-        for i in range(n_cells):
-            self.fields.append(f"Cell {i+1}")
-        with open(self.filename, 'w', newline='') as csvfile:
-            # creating a csv writer object
-            csvwriter = csv.writer(csvfile)
-            # writing the fields
-            csvwriter.writerow(self.fields)
-
 
         # i2c bus
         self.i2c = busio.I2C(board.SCL, board.SDA)
 
-        # mcp and tca scaffolding
-        '''
+        # set up MCPs
         n_mcp = 8
         n_mcp_gpio = 16
         self.mcp = [None for i in range(n_mcp)]
         self.mcp_pins = [[None for i in range(n_mcp_gpio)] for j in range(n_mcp)]
-        '''
-        n_tca = 1
+
+        # set up TCAs
+        n_tca = 4
         n_tca_i2c = 8
         self.tca = [None for i in range(n_tca)]
         self.sensor_array = [[None for i in range(n_tca_i2c)] for j in range(n_tca)]
 
         # init reset msp
-        #self.setup_mcp(7)
+        self.setup_mcp(7)
 
-        self.setup_tca(0)
+        # init other MCPs
+        for i in range(6):
+            self.setup_mcp(i)
 
-        for i in range(n_cells):
-            print(f"mpr: {i}")
-            self.setup_mpr(i)
-        # setup the rest of the main i2c devices
-        # self.setup_i2c()
+        # init TCAs
+        for i in range(n_tca):
+            self.setup_tca(i)
+
+        # # init pressure sensors
+        # for i in range(n_cells):
+        #     print(f"mpr: {i}")
+        #     self.setup_mpr(i)
+        # # set up the rest of the main i2c devices
+        # # self.setup_i2c()
+
+    def init_log_file(self):
+        fields = ["Time"]
+        for i in range(self.n_cells):
+            fields.append(f"Cell {i+1}")
+        with open(self.filename, 'w', newline='') as csvfile:
+            # creating a csv writer object
+            csvwriter = csv.writer(csvfile)
+            # writing the fields
+            csvwriter.writerow(fields)
+
+    # logs a line of data to the log file
+    def log_data(self, line):
+        with open(self.filename, 'a', newline='') as csvfile:
+            csvwriter = csv.writer(csvfile)
+            csvwriter.writerow(line)
 
     # gets pressure sensor values, formats into a row, and appends to log file
     def get_sensor_values(self):
@@ -91,11 +105,8 @@ class Controller:
         value = self.sensor_array[tca_id][line_id].pressure
         return value
 
-    # logs a line of data to the log file
-    def log_data(self, line):
-        with open(self.filename, 'a', newline='') as csvfile:
-            csvwriter = csv.writer(csvfile)
-            csvwriter.writerow(line)
+
+
     '''
     # whole function is a mess
     def setup_i2c(self):
@@ -120,6 +131,7 @@ class Controller:
         self.mpr1 = adafruit_mprls.MPRLS(self.tca1[1], psi_min=0, psi_max=25)
         return
     '''
+
     def setup_mcp(self, mcp_id, n_pins=16):
         self.mcp[mcp_id] = MCP23017(self.i2c, address=0x20+mcp_id)
 
@@ -129,6 +141,7 @@ class Controller:
             self.mcp_pins[mcp_id][i].switch_to_output(value=True)
 
             # if mcp_id == 7, drive all pins high (reset mcp)
+            # else drive all pins low
             if mcp_id == 7:
                 self.mcp_pins[mcp_id][i].value = True
             else:
@@ -189,7 +202,7 @@ class Controller:
             self.mcp_pins[mcp_id][mcp_pin].value = False
         else:
             # get mcp pin
-            mcp_pin =(cell_id % 8) * 2 - 1
+            mcp_pin = (cell_id % 8) * 2 - 1
             # open solenoid valve
             self.mcp_pins[mcp_id][mcp_pin].value = True
             while (self.pressure_val(cell_id) > pressure) and (time.time()-start < 4):

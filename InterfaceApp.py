@@ -10,10 +10,11 @@ from time import sleep
 from random import randrange
 
 testing = True
+n_cells = 30
 
 if not testing:
     import ControlClass
-    controller = ControlClass.Controller(2)
+    controller = ControlClass.Controller(n_cells)
 
 server = flask.Flask(__name__)
 app = Dash(__name__, server=server)
@@ -66,7 +67,7 @@ def heat_map(num_rows, num_columns, num_cells):
                                                   "Pressure: %{z}<extra></extra>",
                                     zmin=14.5
                                     ))
-    fig.update_layout(title_text='Pressure Map', width=125*n_columns, height=70*n_rows)
+    fig.update_layout(title_text='Pressure Map', width=90*n_columns, height=70*n_rows)
     return fig
 
 
@@ -76,7 +77,9 @@ def time_series(cell_id=2):
     else:
         df = pd.read_csv("logs/log_debug.csv")
 
-    fig = px.scatter(df, x="Time", y=f"Cell {cell_id}")
+    fig = px.scatter(df, x="Time", y=f"Cell {cell_id}", title=f"Cell {cell_id}")
+    fig.update_xaxes(title_text='Time (seconds)')
+    fig.update_yaxes(title_text='Pressure (PSI)')
     fig.update_traces(mode='lines+markers')
     return fig
 
@@ -85,8 +88,7 @@ def time_series(cell_id=2):
 # App layout
 app.layout = html.Div([
     html.Div(children=[
-        dcc.Graph(id='live-pressure-graph',
-                  hoverData={'points'}),
+        dcc.Graph(id='live-pressure-graph'),
 
         dcc.Interval(
             id='interval-component',
@@ -113,6 +115,9 @@ app.layout = html.Div([
         html.Button('Send Command', id='btn-send-cmd', n_clicks=0),
         html.Div(id='container-last-cmd'),
         html.Br(),
+        html.Button('Initialization: Fill All Cells', id='fill-all-cells', n_clicks=0),
+        html.Div(id='container-fill-all-cells-cmd'),
+        html.Br()
     ], style={'padding': 10, 'flex': 1})
 
 ], style={'display': 'flex', 'flex-direction': 'row'})
@@ -141,6 +146,26 @@ def cmd_fun(cell_id, state, duration, btn):
             print(cell_id, state, duration)
         return html.Div(cmd)
 
+# fill all cells
+@app.callback(
+    Output('container-fill-all-cells-cmd', 'children'),
+    Input('fill-all-cells', 'n_clicks')
+)
+def cmd_fun(btn):
+    changed_id = [p['prop_id'] for p in callback_context.triggered][0]
+    if 'fill-all-cells' in changed_id:
+        line = 'Filling all cells'
+        print(line)
+
+        # socket.send_string(cmd)
+
+        # or
+        if not testing:
+            controller.fill_all_cells()
+        else:
+            print('testing')
+        return html.Div(line)
+
 
 # Update live pressure map
 @app.callback(Output('live-pressure-graph', 'figure'),
@@ -156,10 +181,13 @@ def update_graph_live(n):
 @app.callback(Output('pressure-time-series-graph', 'figure'),
               Input('live-pressure-graph', 'hoverData'),
               Input('interval-component', 'n_intervals'))
-def update_time_series(hoverData):
-    x = hoverData['points'][0]['x']
-    y = 11-hoverData['points'][0]['y']
-    box_id = x+y*n_columns
+def update_time_series(hoverData, n):
+    try:
+        x = hoverData['points'][0]['x']
+        y = 11-hoverData['points'][0]['y']
+        box_id = x+y*n_columns
+    except TypeError:
+        box_id = 1
     cell_ids = [1, 1, 1, 1, 1, 2, 3, 4, 5, 9, 2, 6, 7, 8, 9, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 12, 13, 14, 15, 19, 12, 16, 17, 18, 19, 20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 22, 23, 24, 25, 29, 22, 26, 27, 28, 29, 30, 30, 30, 30, 30]
     fig = time_series(cell_ids[box_id])
     return fig
@@ -169,7 +197,6 @@ def update_time_series(hoverData):
 if __name__ == '__main__':
     n_rows = 12
     n_columns = 5
-    n_cells = 30
 
     # if debug is set to True, zmq won't work
     app.run_server(debug=False, host='127.0.0.1', port=8080)

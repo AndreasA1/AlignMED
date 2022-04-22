@@ -62,16 +62,16 @@ class Controller:
         for i in range(6):
             self.setup_mcp(i)
 
-        # init TCAs
-        for i in range(n_tca):
-            self.setup_tca(i)
-
-        # init pressure sensors
-        for i in range(n_cells):
-            print(f"mpr: {i}")
-            self.setup_mpr(i)
-        # # set up the rest of the main i2c devices
-        # # self.setup_i2c()
+        # # init TCAs
+        # for i in range(n_tca):
+        #     self.setup_tca(i)
+        #
+        # # init pressure sensors
+        # for i in range(n_cells):
+        #     print(f"mpr: {i}")
+        #     self.setup_mpr(i)
+        # # # set up the rest of the main i2c devices
+        # # # self.setup_i2c()
 
         print("success")
 

@@ -42,14 +42,39 @@ mcp5.value = True
 mcp6.value = True
 mcp7.value = True
 
-mpr1 = adafruit_mprls.MPRLS(tca1[0], psi_min=0, psi_max=25)
-mpr2 = adafruit_mprls.MPRLS(tca1[1], psi_min=0, psi_max=25)
-mpr3 = adafruit_mprls.MPRLS(tca1[2], psi_min=0, psi_max=25)
-mpr4 = adafruit_mprls.MPRLS(tca1[3], psi_min=0, psi_max=25)
-mpr5 = adafruit_mprls.MPRLS(tca1[4], psi_min=0, psi_max=25)
-mpr6 = adafruit_mprls.MPRLS(tca1[5], psi_min=0, psi_max=25)
-mpr7 = adafruit_mprls.MPRLS(tca1[6], psi_min=0, psi_max=25)
-mpr8 = adafruit_mprls.MPRLS(tca1[7], psi_min=0, psi_max=25)
+try:
+    mpr1 = adafruit_mprls.MPRLS(tca1[0], psi_min=0, psi_max=25)
+except:
+    print("1")
+try:
+    mpr2 = adafruit_mprls.MPRLS(tca1[1], psi_min=0, psi_max=25)
+except:
+    print("2")
+try:
+    mpr3 = adafruit_mprls.MPRLS(tca1[2], psi_min=0, psi_max=25)
+except:
+    print("3")
+try:
+    mpr4 = adafruit_mprls.MPRLS(tca1[3], psi_min=0, psi_max=25)
+except:
+    print("4")
+try:
+    mpr5 = adafruit_mprls.MPRLS(tca1[4], psi_min=0, psi_max=25)
+except:
+    print("5")
+try:
+    mpr6 = adafruit_mprls.MPRLS(tca1[5], psi_min=0, psi_max=25)
+except:
+    print("6")
+try:
+    mpr7 = adafruit_mprls.MPRLS(tca1[6], psi_min=0, psi_max=25)
+except:
+    print("7")
+try:
+    mpr8 = adafruit_mprls.MPRLS(tca1[7], psi_min=0, psi_max=25)
+except:
+    print("8")
+
 
 while True:
     # print((mpr1.pressure,))

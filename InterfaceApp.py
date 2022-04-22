@@ -142,7 +142,7 @@ def cmd_fun(cell_id, state, duration, btn):
 
         # or
         if not testing:
-            controller.actuate_duration(cell_id, state, duration)
+            controller.actuate_duration(int(cell_id), int(state), float(duration))
         else:
             print(cell_id, state, duration)
         return html.Div(cmd)

@@ -50,10 +50,10 @@ except:
 #     mpr2 = adafruit_mprls.MPRLS(tca1[1], psi_min=0, psi_max=25)
 # except:
 #     print("2")
-# try:
-#     mpr3 = adafruit_mprls.MPRLS(tca1[2], psi_min=0, psi_max=25)
-# except:
-#     print("3")
+try:
+    mpr3 = adafruit_mprls.MPRLS(tca1[2], psi_min=0, psi_max=25)
+except:
+    print("3")
 # try:
 #     mpr4 = adafruit_mprls.MPRLS(tca1[3], psi_min=0, psi_max=25)
 # except:
@@ -78,9 +78,9 @@ except:
 
 while True:
     # print((mpr1.pressure,))
-    print(f"Pressure Sensor 1: {mpr1.pressure}")
+    # print(f"Pressure Sensor 1: {mpr1.pressure}")
     # print(f"Pressure Sensor 2: {mpr2.pressure}")
-    # print(f"Pressure Sensor 3: {mpr3.pressure}")
+    print(f"Pressure Sensor 3: {mpr3.pressure}")
     # print(f"Pressure Sensor 4: {mpr4.pressure}")
     # print(f"Pressure Sensor 5: {mpr5.pressure}")
     # print(f"Pressure Sensor 6: {mpr6.pressure}")

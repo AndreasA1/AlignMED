@@ -10,7 +10,7 @@ import adafruit_mprls
 i2c = busio.I2C(board.SCL, board.SDA)
 
 # create tca object
-tca1 = adafruit_tca9548a.TCA9548A(i2c)
+tca1 = adafruit_tca9548a.TCA9548A(i2c, address=0x70)
 
 mpr1 = adafruit_mprls.MPRLS(tca1[0], psi_min=0, psi_max=25)
 mpr2 = adafruit_mprls.MPRLS(tca1[1], psi_min=0, psi_max=25)

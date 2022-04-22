@@ -46,44 +46,44 @@ try:
     mpr1 = adafruit_mprls.MPRLS(tca1[0], psi_min=0, psi_max=25)
 except:
     print("1")
-try:
-    mpr2 = adafruit_mprls.MPRLS(tca1[1], psi_min=0, psi_max=25)
-except:
-    print("2")
-try:
-    mpr3 = adafruit_mprls.MPRLS(tca1[2], psi_min=0, psi_max=25)
-except:
-    print("3")
-try:
-    mpr4 = adafruit_mprls.MPRLS(tca1[3], psi_min=0, psi_max=25)
-except:
-    print("4")
-try:
-    mpr5 = adafruit_mprls.MPRLS(tca1[4], psi_min=0, psi_max=25)
-except:
-    print("5")
-try:
-    mpr6 = adafruit_mprls.MPRLS(tca1[5], psi_min=0, psi_max=25)
-except:
-    print("6")
-try:
-    mpr7 = adafruit_mprls.MPRLS(tca1[6], psi_min=0, psi_max=25)
-except:
-    print("7")
-try:
-    mpr8 = adafruit_mprls.MPRLS(tca1[7], psi_min=0, psi_max=25)
-except:
-    print("8")
+# try:
+#     mpr2 = adafruit_mprls.MPRLS(tca1[1], psi_min=0, psi_max=25)
+# except:
+#     print("2")
+# try:
+#     mpr3 = adafruit_mprls.MPRLS(tca1[2], psi_min=0, psi_max=25)
+# except:
+#     print("3")
+# try:
+#     mpr4 = adafruit_mprls.MPRLS(tca1[3], psi_min=0, psi_max=25)
+# except:
+#     print("4")
+# try:
+#     mpr5 = adafruit_mprls.MPRLS(tca1[4], psi_min=0, psi_max=25)
+# except:
+#     print("5")
+# try:
+#     mpr6 = adafruit_mprls.MPRLS(tca1[5], psi_min=0, psi_max=25)
+# except:
+#     print("6")
+# try:
+#     mpr7 = adafruit_mprls.MPRLS(tca1[6], psi_min=0, psi_max=25)
+# except:
+#     print("7")
+# try:
+#     mpr8 = adafruit_mprls.MPRLS(tca1[7], psi_min=0, psi_max=25)
+# except:
+#     print("8")
 
 
 while True:
     # print((mpr1.pressure,))
     print(f"Pressure Sensor 1: {mpr1.pressure}")
-    print(f"Pressure Sensor 2: {mpr2.pressure}")
-    print(f"Pressure Sensor 3: {mpr3.pressure}")
-    print(f"Pressure Sensor 4: {mpr4.pressure}")
-    print(f"Pressure Sensor 5: {mpr5.pressure}")
-    print(f"Pressure Sensor 6: {mpr6.pressure}")
-    print(f"Pressure Sensor 7: {mpr7.pressure}")
-    print(f"Pressure Sensor 8: {mpr8.pressure}")
+    # print(f"Pressure Sensor 2: {mpr2.pressure}")
+    # print(f"Pressure Sensor 3: {mpr3.pressure}")
+    # print(f"Pressure Sensor 4: {mpr4.pressure}")
+    # print(f"Pressure Sensor 5: {mpr5.pressure}")
+    # print(f"Pressure Sensor 6: {mpr6.pressure}")
+    # print(f"Pressure Sensor 7: {mpr7.pressure}")
+    # print(f"Pressure Sensor 8: {mpr8.pressure}")
     time.sleep(1)

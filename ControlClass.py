@@ -103,7 +103,11 @@ class Controller:
     def pressure_val(self, sensor_id):
         tca_id = sensor_id // 8
         line_id = sensor_id % 4
-        value = self.sensor_array[tca_id][line_id].pressure
+        try:
+            value = self.sensor_array[tca_id][line_id].pressure
+        except:
+            print(f"Sensor {sensor_id} unable to return value")
+            value = 0
         return value
 
     def setup_mcp(self, mcp_id, n_pins=16):
@@ -134,6 +138,19 @@ class Controller:
     def setup_mpr(self, sensor_id):
         tca_id = sensor_id // 8
         line_id = sensor_id % 8
+        if line_id == 2:
+            line_id = 7
+        if line_id == 3:
+            line_id = 6
+        if line_id == 4:
+            line_id = 5
+        if line_id == 5:
+            line_id = 4
+        if line_id == 6:
+            line_id = 3
+        if line_id == 7:
+            line_id = 2
+
         print(sensor_id, tca_id, line_id)
         # really not confident this will work
         try:

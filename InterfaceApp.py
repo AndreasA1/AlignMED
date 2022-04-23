@@ -24,7 +24,7 @@ context = zmq.Context()
 socket = context.socket(zmq.PUB)
 socket.bind("tcp://127.0.0.1:6000")
 
-g
+
 def heat_map(num_rows, num_columns, num_cells):
     if testing:
         df = pd.read_csv("logs/log_test.csv")

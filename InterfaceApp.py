@@ -19,10 +19,10 @@ if not testing:
 server = flask.Flask(__name__)
 app = Dash(__name__, server=server)
 
-# zmq stuff to communicate with controller
-context = zmq.Context()
-socket = context.socket(zmq.PUB)
-socket.bind("tcp://127.0.0.1:6000")
+# # zmq stuff to communicate with controller
+# context = zmq.Context()
+# socket = context.socket(zmq.PUB)
+# socket.bind("tcp://127.0.0.1:6000")
 
 
 def heat_map(num_rows, num_columns, num_cells):

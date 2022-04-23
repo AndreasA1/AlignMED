@@ -140,15 +140,15 @@ class Controller:
         line_id = sensor_id % 8
         if line_id == 2:
             line_id = 7
-        if line_id == 3:
+        elif line_id == 3:
             line_id = 6
-        if line_id == 4:
+        elif line_id == 4:
             line_id = 5
-        if line_id == 5:
+        elif line_id == 5:
             line_id = 4
-        if line_id == 6:
+        elif line_id == 6:
             line_id = 3
-        if line_id == 7:
+        elif line_id == 7:
             line_id = 2
 
         print(sensor_id+1, tca_id, line_id)

@@ -64,8 +64,7 @@ class Controller:
             self.setup_mcp(i)
 
         # init TCAs
-        for i in range(n_tca):
-            self.setup_tca(i)
+        self.setup_tca()
 
         # init pressure sensors
         for i in range(n_cells):
@@ -149,19 +148,16 @@ class Controller:
             else:
                 self.mcp_pins[mcp_id][i].value = False
 
-    def setup_tca(self, tca_id):
-        if tca_id == 0:
-            self.tca[1] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
-        if tca_id == 1:
-            self.tca[0] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
-        if tca_id == 2:
-            self.tca[3] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
-        if tca_id == 3:
-            self.tca[2] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
+    def setup_tca(self):
+        self.tca[0] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x71)
+        self.tca[1] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70)
+        self.tca[2] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x73)
+        self.tca[3] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x72)
 
     def setup_mpr(self, sensor_id):
         tca_id = sensor_id // 8
         line_id = sensor_id % 8
+        # switch line id
         if line_id == 2:
             line_id = 7
         elif line_id == 3:
@@ -175,6 +171,7 @@ class Controller:
         elif line_id == 7:
             line_id = 2
 
+        # switch tca id
         if tca_id == 0:
             tca_id = 1
         elif tca_id == 1:
@@ -182,7 +179,7 @@ class Controller:
         elif tca_id == 2:
             tca_id = 3
         elif tca_id == 3:
-            tca_id = 2
+            tca_id = 2.
 
         print(sensor_id+1, tca_id, line_id)
         try:
@@ -238,6 +235,7 @@ class Controller:
     def actuate_pressure(self, cell_id, pressure):
         mcp_id = (cell_id-1) // 8
         start = time.time()
+        sensor_id = cell_id-1
         # if desired pressure is greater than current pressure
         if pressure > self.pressure_val(cell_id):  # open inlet
             state = 1
@@ -246,7 +244,7 @@ class Controller:
             mcp_pin = (solenoid_id-1) % 16
             # open solenoid valve
             self.mcp_pins[mcp_id][mcp_pin].value = True
-            while (self.pressure_val(cell_id) > pressure) and (time.time()-start < 4):
+            while (self.pressure_val(sensor_id) > pressure) and (time.time()-start < 4):
                 sleep(0.1)
             self.mcp_pins[mcp_id][mcp_pin].value = False
         else:  # open outlet
@@ -256,7 +254,7 @@ class Controller:
             mcp_pin = (solenoid_id-1) % 16
             # open solenoid valve
             self.mcp_pins[mcp_id][mcp_pin].value = True
-            while (self.pressure_val(cell_id) > pressure) and (time.time()-start < 4):
+            while (self.pressure_val(sensor_id) > pressure) and (time.time()-start < 4):
                 sleep(0.1)
             self.mcp_pins[mcp_id][mcp_pin].value = False
         return
@@ -269,7 +267,7 @@ class Controller:
 
 if __name__ == '__main__':
     print("we controlling")
-    num_cells = 2
+    num_cells = 30
     con = Controller(num_cells)
 
     while True:

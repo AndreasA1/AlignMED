@@ -173,13 +173,13 @@ class Controller:
 
         # switch tca id
         if tca_id == 0:
-            tca_id = 1
+            tca_id = int(1)
         elif tca_id == 1:
-            tca_id = 0
+            tca_id = int(0)
         elif tca_id == 2:
-            tca_id = 3
+            tca_id = int(3)
         elif tca_id == 3:
-            tca_id = 2.
+            tca_id = int(2)
 
         print(sensor_id+1, tca_id, line_id)
         try:

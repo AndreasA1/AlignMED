@@ -92,7 +92,7 @@ class Controller:
 
     # gets pressure sensor values, formats into a row, and appends to log file
     def get_sensor_values(self):
-        line = [time.time_ns()]
+        line = [time.time()]
         for i in range(self.n_cells):
             value = self.pressure_val(i)  # call pressure_val(i)
             line.append(value)

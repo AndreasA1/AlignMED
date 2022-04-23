@@ -117,6 +117,7 @@ class Controller:
         elif line_id == 7:
             line_id = 2
 
+        print(f"Sensor {sensor_id+1} at tca {tca_id} line {line_id}")
         try:
             value = 0.0145037738 * self.sensor_array[tca_id][line_id].pressure
         except:

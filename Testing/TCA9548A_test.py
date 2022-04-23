@@ -52,6 +52,7 @@ mcp7.value = True
 #     print("2")
 try:
     mpr3 = adafruit_mprls.MPRLS(tca1[0], psi_min=0, psi_max=25)
+    print("connected to pressure sensor")
 except:
     print("3")
 # try:

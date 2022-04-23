@@ -103,12 +103,12 @@ class Controller:
     # gets the value for one pressure sensor
     def pressure_val(self, sensor_id):
         tca_id = sensor_id // 8
-        line_id = sensor_id % 4
+        line_id = sensor_id % 8
         try:
             value = 0.0145037738 * self.sensor_array[tca_id][line_id].pressure
         except:
             print(f"Sensor {sensor_id} unable to return value")
-            value = 14.5
+            value = 14.8
         return value
 
     def setup_mcp(self, mcp_id, n_pins=16):
@@ -180,7 +180,7 @@ class Controller:
 
     def actuate_duration(self, cell_id, state, duration):
         # get solenoid id
-        print("actuating")
+        print(f"actuating cell {cell_id}")
         solenoid_id = (cell_id-1)*2 + state
         # get mcp id
         mcp_id = (cell_id-1) // 8
@@ -191,11 +191,12 @@ class Controller:
         # set mcp pin to high
         self.mcp_pins[mcp_id][mcp_pin].value = True
         start = time.time()
-        p_val = self.pressure_val(cell_id)
+        sensor_id = cell_id-1
+        p_val = self.pressure_val(sensor_id)
         # sleep for the duration while checking for cutoff pressure
         while (p_val < self.cutoff_pressure) and (time.time()-start < duration):
             sleep(0.1)
-            p_val = self.pressure_val(cell_id)
+            p_val = self.pressure_val(sensor_id)
             print(p_val)
         # set mcp pin to low
         self.mcp_pins[mcp_id][mcp_pin].value = False

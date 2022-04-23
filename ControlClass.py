@@ -104,7 +104,7 @@ class Controller:
         tca_id = sensor_id // 8
         line_id = sensor_id % 4
         try:
-            value = self.sensor_array[tca_id][line_id].pressure
+            value = 0.0145037738 * self.sensor_array[tca_id][line_id].pressure
         except:
             print(f"Sensor {sensor_id} unable to return value")
             value = 0

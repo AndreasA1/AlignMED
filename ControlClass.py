@@ -107,7 +107,7 @@ class Controller:
             value = 0.0145037738 * self.sensor_array[tca_id][line_id].pressure
         except:
             print(f"Sensor {sensor_id} unable to return value")
-            value = 0
+            value = 14.5
         return value
 
     def setup_mcp(self, mcp_id, n_pins=16):

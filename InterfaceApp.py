@@ -73,10 +73,11 @@ def heat_map(num_rows, num_columns, num_cells):
 
 
 def time_series(cell_id=2):
-    if testing:
-        df = pd.read_csv("logs/log_test.csv")
-    else:
-        df = pd.read_csv("logs/log_debug.csv")
+    # if testing:
+    #     df = pd.read_csv("logs/log_test.csv")
+    # else:
+    #     df = pd.read_csv("logs/log_debug.csv")
+    df = pd.read_csv("logs/log_test.csv")
 
     fig = px.scatter(df, x="Time", y=f"Cell {cell_id}", title=f"Cell {cell_id}")
     fig.update_xaxes(title_text='Time (seconds)')

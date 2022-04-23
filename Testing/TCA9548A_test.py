@@ -50,11 +50,11 @@ mcp7.value = True
 #     mpr2 = adafruit_mprls.MPRLS(tca1[1], psi_min=0, psi_max=25)
 # except:
 #     print("2")
-try:
-    mpr3 = adafruit_mprls.MPRLS(tca1[0], psi_min=0, psi_max=25)
-    print("connected to pressure sensor")
-except:
-    print("3")
+
+mpr3 = adafruit_mprls.MPRLS(tca1[0], psi_min=0, psi_max=25)
+print("connected to pressure sensor")
+# except:
+#     print("3")
 # try:
 #     mpr4 = adafruit_mprls.MPRLS(tca1[3], psi_min=0, psi_max=25)
 # except:

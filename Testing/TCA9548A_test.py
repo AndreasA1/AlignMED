@@ -12,7 +12,7 @@ from adafruit_mcp230xx.mcp23017 import MCP23017 #I/O expander library
 i2c = busio.I2C(board.SCL, board.SDA)
 
 # create tca object
-tca1 = adafruit_tca9548a.TCA9548A(i2c, address=0x70)
+tca1 = adafruit_tca9548a.TCA9548A(i2c, address=0x71)
 
 mcp = MCP23017(i2c, address=0x24)
 mcp0 = mcp.get_pin(0)
@@ -51,7 +51,7 @@ mcp7.value = True
 # except:
 #     print("2")
 try:
-    mpr3 = adafruit_mprls.MPRLS(tca1[2], psi_min=0, psi_max=25)
+    mpr3 = adafruit_mprls.MPRLS(tca1[0], psi_min=0, psi_max=25)
 except:
     print("3")
 # try:

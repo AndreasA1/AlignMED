@@ -125,11 +125,11 @@ class Controller:
         if tca_id == 0:
             self.tca[1] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
         if tca_id == 1:
-            self.tca[2] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
+            self.tca[0] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
         if tca_id == 2:
             self.tca[3] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
         if tca_id == 3:
-            self.tca[2] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
+            self.tca[2g] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
 
     def setup_mpr(self, sensor_id):
         tca_id = sensor_id // 8

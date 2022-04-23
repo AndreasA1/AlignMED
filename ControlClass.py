@@ -196,6 +196,7 @@ class Controller:
         while (p_val < self.cutoff_pressure) and (time.time()-start < duration):
             sleep(0.1)
             p_val = self.pressure_val(cell_id)
+            print(p_val)
         # set mcp pin to low
         self.mcp_pins[mcp_id][mcp_pin].value = False
         print("done")

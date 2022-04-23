@@ -175,7 +175,7 @@ def cmd_fun(btn):
               Input('interval-component', 'n_intervals'))
 def update_graph_live(n):
     if not testing:
-        print("hello")
+        print("interval")
         controller.get_sensor_values()
     fig = heat_map(n_rows, n_columns, n_cells)
     return fig

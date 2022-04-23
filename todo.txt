@@ -51,3 +51,4 @@ Increase size of solenoid board to allow for thicker power plane around edges
 Add outline to that one sensor
 Maybe get rid of resets high key
 Switch i2c lines coming out of right side of TCAs
+Solenoid labels

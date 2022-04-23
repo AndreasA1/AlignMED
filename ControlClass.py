@@ -149,7 +149,7 @@ class Controller:
             else:
                 self.mcp_pins[mcp_id][i].value = False
 
-    def setup_tca(self, tca_id, n_sensors=8):
+    def setup_tca(self, tca_id):
         if tca_id == 0:
             self.tca[1] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
         if tca_id == 1:
@@ -185,14 +185,13 @@ class Controller:
             tca_id = 2
 
         print(sensor_id+1, tca_id, line_id)
-        # really not confident this will work
         try:
             self.sensor_array[tca_id][line_id] = adafruit_mprls.MPRLS(self.tca[tca_id][line_id], psi_min=0, psi_max=25)
             sleep(0.1)
         except:
             print(f"Sensor # {sensor_id+1} not working")
             sleep(0.1)
-
+    '''
     def receive_cmd(self):
         try:
             cmd = self.socket.recv(flags=zmq.NOBLOCK)
@@ -209,6 +208,7 @@ class Controller:
 
     def receive_actuate_cmd(self):
         return
+    '''
 
     def actuate_duration(self, cell_id, state, duration):
         # get solenoid id

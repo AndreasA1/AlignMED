@@ -19,6 +19,7 @@ class Controller:
     def __init__(self, n_cells):
         print("initializing controller class")
         self.cutoff_pressure = 15.2  # psi
+        self.cutoff_time = 1.5  # seconds
 
         # initialize class-level values
         self.n_cells = n_cells
@@ -226,7 +227,7 @@ class Controller:
             mcp_pin = (solenoid_id-1) % 16
             # open solenoid valve
             self.mcp_pins[mcp_id][mcp_pin].value = True
-            while (self.pressure_val(sensor_id) > pressure) and (time.time()-start < 4):
+            while (self.pressure_val(sensor_id) > pressure) and (time.time()-start < self.cutoff_time):
                 sleep(0.1)
             self.mcp_pins[mcp_id][mcp_pin].value = False
         else:  # open outlet
@@ -236,7 +237,7 @@ class Controller:
             mcp_pin = (solenoid_id-1) % 16
             # open solenoid valve
             self.mcp_pins[mcp_id][mcp_pin].value = True
-            while (self.pressure_val(sensor_id) > pressure) and (time.time()-start < 4):
+            while (self.pressure_val(sensor_id) > pressure) and (time.time()-start < self.cutoff_time):
                 sleep(0.1)
             self.mcp_pins[mcp_id][mcp_pin].value = False
         return

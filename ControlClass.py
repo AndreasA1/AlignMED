@@ -116,14 +116,14 @@ class Controller:
         elif line_id == 7:
             line_id = 2
 
-        if tca_id == 0:
-            tca_id = 1
-        elif tca_id == 1:
-            tca_id = 0
-        elif tca_id == 2:
-            tca_id = 3
-        elif tca_id == 3:
-            tca_id = 2
+        # if tca_id == 0:
+        #     tca_id = 1
+        # elif tca_id == 1:
+        #     tca_id = 0
+        # elif tca_id == 2:
+        #     tca_id = 3
+        # elif tca_id == 3:
+        #     tca_id = 2
 
         print(f"Sensor {sensor_id+1} at tca {tca_id} line {line_id}")
         try:
@@ -171,15 +171,15 @@ class Controller:
         elif line_id == 7:
             line_id = 2
 
-        # switch tca id
-        if tca_id == 0:
-            tca_id = int(1)
-        elif tca_id == 1:
-            tca_id = int(0)
-        elif tca_id == 2:
-            tca_id = int(3)
-        elif tca_id == 3:
-            tca_id = int(2)
+        # # switch tca id
+        # if tca_id == 0:
+        #     tca_id = int(1)
+        # elif tca_id == 1:
+        #     tca_id = int(0)
+        # elif tca_id == 2:
+        #     tca_id = int(3)
+        # elif tca_id == 3:
+        #     tca_id = int(2)
 
         print(sensor_id+1, tca_id, line_id)
         try:

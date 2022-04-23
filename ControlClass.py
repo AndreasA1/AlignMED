@@ -151,7 +151,7 @@ class Controller:
         if line_id == 7:
             line_id = 2
 
-        print(sensor_id, tca_id, line_id)
+        print(sensor_id+1, tca_id, line_id)
         # really not confident this will work
         try:
             self.sensor_array[tca_id][line_id] = adafruit_mprls.MPRLS(self.tca[tca_id][line_id], psi_min=0, psi_max=25)

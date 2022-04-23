@@ -120,7 +120,7 @@ class Controller:
         try:
             value = 0.0145037738 * self.sensor_array[tca_id][line_id].pressure
         except:
-            print(f"Sensor {sensor_id} unable to return value")
+            print(f"Sensor {sensor_id+1} unable to return value")
             value = 14.8
         return value
 

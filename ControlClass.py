@@ -71,7 +71,7 @@ class Controller:
             print(f"mpr: {i}")
             self.setup_mpr(i)
 
-
+        self.init_log_file()
         print("success")
 
     def init_log_file(self):
@@ -96,8 +96,8 @@ class Controller:
         for i in range(self.n_cells):
             value = self.pressure_val(i)  # call pressure_val(i)
             line.append(value)
-            print(line)
-            self.log_data(line)
+        # print(line)
+        self.log_data(line)
 
     # gets the value for one pressure sensor
     def pressure_val(self, sensor_id):

@@ -174,7 +174,7 @@ def cmd_fun(btn):
 def update_graph_live(n):
     if not testing:
         print("hello")
-        # controller.get_sensor_values()
+        controller.get_sensor_values()
     fig = heat_map(n_rows, n_columns, n_cells)
     return fig
 

@@ -40,3 +40,14 @@ Latter-stage:
 Done:
 3) setup interactive graph - done
 9) fix time series graph, add hovering - done
+
+
+PCB Pt2:
+Fix TCA labels/addressing
+Fix sensor labels
+Reroute I2C lines for lower impedance
+Reroute traces that are on top of each other
+Increase size of solenoid board to allow for thicker power plane around edges
+Add outline to that one sensor
+Maybe get rid of resets high key
+Switch i2c lines coming out of right side of TCAs

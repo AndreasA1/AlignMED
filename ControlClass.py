@@ -18,6 +18,7 @@ from time import sleep
 class Controller:
     def __init__(self, n_cells):
         print("initializing controller class")
+        self.cutoff_pressure = 14.8  # psi
 
         # initialize class-level values
         self.n_cells = n_cells
@@ -189,8 +190,12 @@ class Controller:
         print(f"mcp_pin: {mcp_pin}")
         # set mcp pin to high
         self.mcp_pins[mcp_id][mcp_pin].value = True
-        # sleep for the duration
-        sleep(duration)
+        start = time.time()
+        p_val = self.pressure_val(cell_id)
+        # sleep for the duration while checking for cutoff pressure
+        while (p_val < self.cutoff_pressure) and (time.time()-start < duration):
+            sleep(0.1)
+            p_val = self.pressure_val(cell_id)
         # set mcp pin to low
         self.mcp_pins[mcp_id][mcp_pin].value = False
         print("done")
@@ -224,7 +229,7 @@ class Controller:
 
     def fill_all_cells(self):
         for i in range(self.n_cells):
-            self.actuate_pressure(i+1, 16.00)
+            self.actuate_pressure(i+1, self.cutoff_pressure)
         return
 
 

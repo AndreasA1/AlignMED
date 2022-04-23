@@ -104,6 +104,19 @@ class Controller:
     def pressure_val(self, sensor_id):
         tca_id = sensor_id // 8
         line_id = sensor_id % 8
+        if line_id == 2:
+            line_id = 7
+        elif line_id == 3:
+            line_id = 6
+        elif line_id == 4:
+            line_id = 5
+        elif line_id == 5:
+            line_id = 4
+        elif line_id == 6:
+            line_id = 3
+        elif line_id == 7:
+            line_id = 2
+
         try:
             value = 0.0145037738 * self.sensor_array[tca_id][line_id].pressure
         except:

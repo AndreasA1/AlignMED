@@ -95,6 +95,7 @@ class Controller:
         line = [time.time()]
         for i in range(self.n_cells):
             value = self.pressure_val(i)  # call pressure_val(i)
+            sleep(0.05)
             line.append(value)
         # print(line)
         self.log_data(line)
@@ -115,15 +116,6 @@ class Controller:
             line_id = 3
         elif line_id == 7:
             line_id = 2
-
-        # if tca_id == 0:
-        #     tca_id = 1
-        # elif tca_id == 1:
-        #     tca_id = 0
-        # elif tca_id == 2:
-        #     tca_id = 3
-        # elif tca_id == 3:
-        #     tca_id = 2
 
         print(f"Sensor {sensor_id+1} at tca {tca_id} line {line_id}")
         try:
@@ -170,16 +162,6 @@ class Controller:
             line_id = 3
         elif line_id == 7:
             line_id = 2
-
-        # # switch tca id
-        # if tca_id == 0:
-        #     tca_id = int(1)
-        # elif tca_id == 1:
-        #     tca_id = int(0)
-        # elif tca_id == 2:
-        #     tca_id = int(3)
-        # elif tca_id == 3:
-        #     tca_id = int(2)
 
         print(sensor_id+1, tca_id, line_id)
         try:

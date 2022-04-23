@@ -62,16 +62,15 @@ class Controller:
         for i in range(6):
             self.setup_mcp(i)
 
-        # # init TCAs
-        # for i in range(n_tca):
-        #     self.setup_tca(i)
-        #
-        # # init pressure sensors
-        # for i in range(n_cells):
-        #     print(f"mpr: {i}")
-        #     self.setup_mpr(i)
-        # # # set up the rest of the main i2c devices
-        # # # self.setup_i2c()
+        # init TCAs
+        for i in range(n_tca):
+            self.setup_tca(i)
+
+        # init pressure sensors
+        for i in range(n_cells):
+            print(f"mpr: {i}")
+            self.setup_mpr(i)
+
 
         print("success")
 
@@ -107,33 +106,6 @@ class Controller:
         value = self.sensor_array[tca_id][line_id].pressure
         return value
 
-
-
-    '''
-    # whole function is a mess
-    def setup_i2c(self):
-        # whole function needs a rework
-        # 1- connect to all mcp's, drive outputs low
-        # 2- connect to all tca's
-        # 3- setup i2c lines on tca's
-
-
-        # setup mcp7
-        self.mcp0 = MCP23017(self.i2c, address=0x27)
-        self.mcp0_p0 = mcp0.get_pin(0)
-        self.mcp0_p0.switch_to_output(value=True)
-
-        # drive reset pins high
-        self.mcp0_p0.value = True
-
-        # setup tca objects
-        self.tca1 = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70)
-
-        # tie pressure sensors to tca i2c lines
-        self.mpr1 = adafruit_mprls.MPRLS(self.tca1[1], psi_min=0, psi_max=25)
-        return
-    '''
-
     def setup_mcp(self, mcp_id, n_pins=16):
         self.mcp[mcp_id] = MCP23017(self.i2c, address=0x20+mcp_id)
 
@@ -150,7 +122,14 @@ class Controller:
                 self.mcp_pins[mcp_id][i].value = False
 
     def setup_tca(self, tca_id, n_sensors=8):
-        self.tca[tca_id] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
+        if tca_id == 0:
+            self.tca[1] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
+        if tca_id == 1:
+            self.tca[2] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
+        if tca_id == 2:
+            self.tca[3] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
+        if tca_id == 3:
+            self.tca[2] = adafruit_tca9548a.TCA9548A(self.i2c, address=0x70+tca_id)
 
     def setup_mpr(self, sensor_id):
         tca_id = sensor_id // 8
@@ -186,10 +165,10 @@ class Controller:
         print("actuating")
         solenoid_id = (cell_id-1)*2 + state
         # get mcp id
-        mcp_id = cell_id // 8
+        mcp_id = (cell_id-1) // 8
         print(f"mcp id: {mcp_id}")
         # get mcp pin controlling solenoid
-        mcp_pin = solenoid_id % 16
+        mcp_pin = (solenoid_id-1) % 16
         print(f"mcp_pin: {mcp_pin}")
         # set mcp pin to high
         self.mcp_pins[mcp_id][mcp_pin].value = True
@@ -201,20 +180,24 @@ class Controller:
         return
 
     def actuate_pressure(self, cell_id, pressure):
-        mcp_id = cell_id // 8
+        mcp_id = (cell_id-1) // 8
         start = time.time()
         # if desired pressure is greater than current pressure
-        if pressure > self.pressure_val(cell_id):
+        if pressure > self.pressure_val(cell_id):  # open inlet
+            state = 1
             # get mcp pin
-            mcp_pin = ((cell_id-1) % 8) * 2
+            solenoid_id = (cell_id-1)*2 + state
+            mcp_pin = (solenoid_id-1) % 16
             # open solenoid valve
             self.mcp_pins[mcp_id][mcp_pin].value = True
             while (self.pressure_val(cell_id) > pressure) and (time.time()-start < 4):
                 sleep(0.1)
             self.mcp_pins[mcp_id][mcp_pin].value = False
-        else:
+        else:  # open outlet
+            state = 2
             # get mcp pin
-            mcp_pin = (cell_id % 8) * 2 - 1
+            solenoid_id = (cell_id-1)*2 + state
+            mcp_pin = (solenoid_id-1) % 16
             # open solenoid valve
             self.mcp_pins[mcp_id][mcp_pin].value = True
             while (self.pressure_val(cell_id) > pressure) and (time.time()-start < 4):

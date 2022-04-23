@@ -24,6 +24,7 @@ Necessary:
 7) write "fill all cells" button and corresponding control function - doing
 8) have control class only append to file at the start and then set up a button that clears inherited data from log file -mostly done
 9) account for value type errors when an i2c device isnt detected
+10) fix solenoid offset
 
 
 

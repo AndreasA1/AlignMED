@@ -220,14 +220,14 @@ class Controller:
         start = time.time()
         sensor_id = cell_id-1
         # if desired pressure is greater than current pressure
-        if pressure > self.pressure_val(cell_id):  # open inlet
+        if pressure > self.pressure_val(sensor_id):  # open inlet
             state = 1
             # get mcp pin
             solenoid_id = (cell_id-1)*2 + state
             mcp_pin = (solenoid_id-1) % 16
             # open solenoid valve
             self.mcp_pins[mcp_id][mcp_pin].value = True
-            while (self.pressure_val(sensor_id) > pressure) and (time.time()-start < self.cutoff_time):
+            while (pressure > self.pressure_val(sensor_id)) and (time.time()-start < self.cutoff_time):
                 sleep(0.1)
             self.mcp_pins[mcp_id][mcp_pin].value = False
         else:  # open outlet

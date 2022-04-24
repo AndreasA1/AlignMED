@@ -7,7 +7,7 @@ import busio
 # components imports
 from adafruit_mcp230xx.mcp23017 import MCP23017 #I/O expander library
 import adafruit_tca9548a # i2c expander library
-import adafruit_mprls # pressure sensor library
+import adafruit_mprls # pressure sensor library file
 
 import sys
 import zmq

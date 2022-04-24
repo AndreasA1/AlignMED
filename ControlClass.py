@@ -18,7 +18,7 @@ from time import sleep
 class Controller:
     def __init__(self, n_cells):
         print("initializing controller class")
-        self.cutoff_pressure = 14.9  # psi
+        self.cutoff_pressure = 14.95  # psi
         self.cutoff_time = 1.5  # seconds
 
         # initialize class-level values

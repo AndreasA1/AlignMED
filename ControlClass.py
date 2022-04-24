@@ -173,6 +173,10 @@ class Controller:
             print(f"Sensor # {sensor_id+1} not working")
             self.broken_sensors.append(sensor_id+1)
             sleep(0.1)
+
+    def reset_mpr(self, sensor_id):
+        return
+
     '''
     def receive_cmd(self):
         try:

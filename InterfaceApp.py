@@ -66,18 +66,18 @@ def heat_map(num_rows, num_columns, num_cells):
                                     customdata=cells,
                                     hovertemplate="%{customdata}<br>" +
                                                   "Pressure: %{z}<extra></extra>",
-                                    zmin=14.5, zmax=20, text=pressures
+                                    zmin=14.5, zmax=16, text=pressures
                                     ))
     fig.update_layout(title_text='Pressure Map', width=90*n_columns, height=70*n_rows)
     return fig
 
 
 def time_series(cell_id=2):
-    # if testing:
-    #     df = pd.read_csv("logs/log_test.csv")
-    # else:
-    #     df = pd.read_csv("logs/log_debug.csv")
-    df = pd.read_csv("logs/log_test.csv")
+    if testing:
+        df = pd.read_csv("logs/log_test.csv")
+    else:
+        df = pd.read_csv("logs/log_debug.csv")
+    # df = pd.read_csv("logs/log_test.csv")
 
     fig = px.scatter(df, x="Time", y=f"Cell {cell_id}", title=f"Cell {cell_id}")
     fig.update_xaxes(title_text='Time (seconds)')

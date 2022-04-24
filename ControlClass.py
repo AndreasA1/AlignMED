@@ -19,7 +19,7 @@ class Controller:
     def __init__(self, n_cells):
         print("initializing controller class")
         self.cutoff_pressure = 14.95  # psi
-        self.cutoff_time = 3  # seconds
+        self.cutoff_time = 10  # seconds
 
         # initialize class-level values
         self.n_cells = n_cells
@@ -67,6 +67,7 @@ class Controller:
         # init TCAs
         self.setup_tca()
 
+        self.broken_sensors = []
         # init pressure sensors
         for i in range(n_cells):
             print(f"mpr: {i}")
@@ -170,6 +171,7 @@ class Controller:
             sleep(0.1)
         except:
             print(f"Sensor # {sensor_id+1} not working")
+            self.broken_sensors.append(sensor_id+1)
             sleep(0.1)
     '''
     def receive_cmd(self):
@@ -245,7 +247,7 @@ class Controller:
     def fill_all_cells(self):
         for i in range(self.n_cells):
             cell_id = i+1
-            if cell_id not in [9, 14, 16, 22]:
+            if cell_id not in self.broken_sensors:
                 self.actuate_pressure(cell_id, self.cutoff_pressure)
         return
 

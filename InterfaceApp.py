@@ -149,7 +149,7 @@ app.layout = html.Div([
 def cmd_fun(cell_id, state, duration, btn):
     changed_id = [p['prop_id'] for p in callback_context.triggered][0]
     if 'btn-send-cmd' in changed_id:
-        if state == 1:
+        if (state == 1) or (state == 'Open Inlet'):
             cmd = f"Filling {cell_id} for {duration} seconds"
         else:
             cmd = f"Emptying {cell_id} for {duration} seconds"

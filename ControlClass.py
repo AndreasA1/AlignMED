@@ -244,7 +244,9 @@ class Controller:
 
     def fill_all_cells(self):
         for i in range(self.n_cells):
-            self.actuate_pressure(i+1, self.cutoff_pressure)
+            cell_id = 1
+            if cell_id not in [9, 14, 16]:
+                self.actuate_pressure(cell_id, self.cutoff_pressure)
         return
 
 

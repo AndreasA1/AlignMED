@@ -61,6 +61,9 @@ def heat_map(num_rows, num_columns, num_cells):
     cells = list(reversed(np.reshape(cells, (num_rows, num_columns)).tolist()))
     pressures = list(reversed(np.reshape(ps_for_hm, (num_rows, num_columns)).tolist()))
 
+    pressures_display = []
+    for i in range(len(pressures)):
+        pressures_display.append(round(pressures[i], 2))
 
     fig = go.Figure(data=go.Heatmap(z=pressures,
                                     colorscale=[[0, 'rgb(43,216,43)'], [1, 'rgb(255,0,0)']],
@@ -68,7 +71,7 @@ def heat_map(num_rows, num_columns, num_cells):
                                     hovertemplate="%{customdata}<br>" +
                                                   "Pressure: %{z}<extra></extra>",
                                     zmin=14.7, zmax=15.4,
-                                    text=pressures, texttemplate="%{text}"
+                                    text=pressures_display, texttemplate="%{text}"
                                     ))
     fig.update_layout(title_text='Pressure Map', width=90*n_columns, height=70*n_rows)
     return fig

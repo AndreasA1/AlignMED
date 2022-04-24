@@ -19,7 +19,7 @@ class Controller:
     def __init__(self, n_cells):
         print("initializing controller class")
         self.cutoff_pressure = 14.95  # psi
-        self.cutoff_time = 1.5  # seconds
+        self.cutoff_time = 3  # seconds
 
         # initialize class-level values
         self.n_cells = n_cells
@@ -245,7 +245,7 @@ class Controller:
     def fill_all_cells(self):
         for i in range(self.n_cells):
             cell_id = i+1
-            if cell_id not in [9, 14, 16]:
+            if cell_id not in [9, 14, 16, 22]:
                 self.actuate_pressure(cell_id, self.cutoff_pressure)
         return
 

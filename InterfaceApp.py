@@ -30,7 +30,7 @@ def heat_map(num_rows, num_columns, num_cells):
         df = pd.read_csv("logs/log_test.csv")
     else:
         df = pd.read_csv("logs/log_debug.csv")
-    df = pd.read_csv("logs/log_test.csv")
+    # df = pd.read_csv("logs/log_test.csv")
     df_list = df.values.tolist()[-1][1:]
     df_list = df_list[:num_cells]
 
@@ -176,7 +176,7 @@ def cmd_fun(btn):
 def update_graph_live(n):
     if not testing:
         print("interval")
-        #controller.get_sensor_values()
+        controller.get_sensor_values()
     fig = heat_map(n_rows, n_columns, n_cells)
     return fig
 

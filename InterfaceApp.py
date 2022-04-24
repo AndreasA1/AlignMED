@@ -3,13 +3,12 @@ import plotly.express as px  # (version 4.7.0 or higher)
 import plotly.graph_objects as go
 from dash import Dash, dcc, html, Input, Output, State, callback_context  # pip install dash (version 2.0.0 or higher)
 import flask
-import zmq
 import numpy as np
 
 from time import sleep
 from random import randrange
 
-testing = False
+testing = True
 n_cells = 30
 
 if not testing:
@@ -125,6 +124,10 @@ app.layout = html.Div([
         html.Br(),
         html.Button('Initialization: Fill All Cells', id='fill-all-cells', n_clicks=0),
         html.Div(id='container-fill-all-cells-cmd'),
+        html.Br(),
+        html.Button('Reset Sensor: ', id='btn-reset-sensor', n_clicks=0),
+        dcc.Input(id='sensor-id', type='number', placeholder='#'),
+        html.Div(id='container-reset-sensor'),
         html.Br()
     ], style={'padding': 10, 'flex': 1})
 
@@ -144,31 +147,40 @@ def cmd_fun(cell_id, state, duration, btn):
     if 'btn-send-cmd' in changed_id:
         cmd = f"cmd {cell_id} {state} {duration}"
         print(cmd)
-
-        # socket.send_string(cmd)
-
-        # or
         if not testing:
             controller.actuate_duration(int(cell_id), int(state), float(duration))
         else:
             print(cell_id, state, duration)
         return html.Div(cmd)
 
+# reset sensor
+@app.callback(
+    Output('container-reset-sensor', 'children'),
+    Input('sensor-id', 'value'),
+    Input('btn-reset-sensor', 'n_clicks')
+)
+def reset_sensor_fun(sensor_id, btn):
+    changed_id = [p['prop_id'] for p in callback_context.triggered][0]
+    if 'btn-reset-sensor' in changed_id:
+        line = f"Resetting sensor {sensor_id}"
+        print(line)
+        if not testing:
+            controller.reset_mpr(sensor_id-1)
+        else:
+            print("testing new feature")
+        return html.Div(line)
 
 # fill all cells
 @app.callback(
     Output('container-fill-all-cells-cmd', 'children'),
     Input('fill-all-cells', 'n_clicks')
 )
-def cmd_fun(btn):
+def fill_all_cells(btn):
     changed_id = [p['prop_id'] for p in callback_context.triggered][0]
     if 'fill-all-cells' in changed_id:
         line = 'Filling all cells'
         print(line)
 
-        # socket.send_string(cmd)
-
-        # or
         if not testing:
             controller.fill_all_cells()
         else:

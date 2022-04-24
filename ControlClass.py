@@ -5,9 +5,9 @@ import board
 import busio
 
 # components imports
-from adafruit_mcp230xx.mcp23017 import MCP23017 #I/O expander library
-import adafruit_tca9548a # i2c expander library
-import adafruit_mprls # pressure sensor library file
+from adafruit_mcp230xx.mcp23017 import MCP23017  # I/O expander library
+import adafruit_tca9548a  # i2c expander library
+import adafruit_mprls  # pressure sensor library file
 
 import sys
 import zmq
@@ -135,11 +135,16 @@ class Controller:
             self.mcp_pins[mcp_id][i] = self.mcp[mcp_id].get_pin(i)
             self.mcp_pins[mcp_id][i].switch_to_output(value=True)
 
-            # if mcp_id == 7 4 or 5, drive all pins high (reset and sensor mcp's
+            # if mcp_id == 7, drive all pins high (reset and sensor mcp's
             # else drive all pins low
-            if (mcp_id == 7) or (mcp_id == 4) or (mcp_id == 5):
+            if mcp_id == 7:
                 self.mcp_pins[mcp_id][i].value = True
-            else:
+            elif (mcp_id == 4) or (mcp_id == 5): #reset all pressure sensors
+                self.mcp_pins[mcp_id][i].value = True
+                self.mcp_pins[mcp_id][i].value = False
+                sleep(0.001)
+                self.mcp_pins[mcp_id][i].value = True
+            else: # turn off all solenoid pins
                 self.mcp_pins[mcp_id][i].value = False
 
     def setup_tca(self):
@@ -175,6 +180,12 @@ class Controller:
             sleep(0.1)
 
     def reset_mpr(self, sensor_id):
+        mcp_id = (sensor_id // 16) + 4
+        mcp_pin = sensor_id % 16
+        self.mcp_pins[mcp_id][mcp_pin].value = True
+        self.mcp_pins[mcp_id][mcp_pin].value = False
+        sleep(0.001)
+        self.mcp_pins[mcp_id][mcp_pin].value = True
         return
 
     '''
@@ -198,6 +209,8 @@ class Controller:
 
     def actuate_duration(self, cell_id, state, duration):
         # get solenoid id
+        if cell_id == 16:
+            cell_id = 31
         print(f"actuating cell {cell_id}")
         solenoid_id = (cell_id-1)*2 + state
         # get mcp id
@@ -222,6 +235,8 @@ class Controller:
         return
 
     def actuate_pressure(self, cell_id, pressure):
+        if cell_id == 16:
+            cell_id = 31
         mcp_id = (cell_id-1) // 8
         start = time.time()
         sensor_id = cell_id-1

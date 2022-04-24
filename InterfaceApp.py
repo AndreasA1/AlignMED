@@ -8,7 +8,8 @@ import numpy as np
 from time import sleep
 from random import randrange
 
-testing = True
+# testing is false if uploading to rpi
+testing = False
 n_cells = 30
 
 if not testing:
@@ -145,7 +146,10 @@ app.layout = html.Div([
 def cmd_fun(cell_id, state, duration, btn):
     changed_id = [p['prop_id'] for p in callback_context.triggered][0]
     if 'btn-send-cmd' in changed_id:
-        cmd = f"cmd {cell_id} {state} {duration}"
+        if state == 1:
+            cmd = f"Filling {cell_id} for {duration} seconds"
+        else:
+            cmd = f"Emptying {cell_id} for {duration} seconds"
         print(cmd)
         if not testing:
             controller.actuate_duration(int(cell_id), int(state), float(duration))

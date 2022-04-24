@@ -66,7 +66,7 @@ def heat_map(num_rows, num_columns, num_cells):
                                     customdata=cells,
                                     hovertemplate="%{customdata}<br>" +
                                                   "Pressure: %{z}<extra></extra>",
-                                    zmin=14.5, zmax=20
+                                    zmin=14.5, zmax=20, text=True
                                     ))
     fig.update_layout(title_text='Pressure Map', width=90*n_columns, height=70*n_rows)
     return fig

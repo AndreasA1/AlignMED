@@ -129,7 +129,10 @@ app.layout = html.Div([
         html.Button('Reset Sensor: ', id='btn-reset-sensor', n_clicks=0),
         dcc.Input(id='sensor-id', type='number', placeholder='#'),
         html.Div(id='container-reset-sensor'),
-        html.Br()
+        html.Br(),
+        html.Button('Reset Time Series Graph', id='reset-time-series-graph', n_clicks=0),
+        html.Div(id='container-reset-time-series-graph'),
+        html.Br(),
     ], style={'padding': 10, 'flex': 1})
 
 ], style={'display': 'flex', 'flex-direction': 'row'})
@@ -174,6 +177,22 @@ def reset_sensor_fun(sensor_id, btn):
             print("testing new feature")
         return html.Div(line)
 
+# reset time series graph
+@app.callback(
+    Output('container-reset-time-series-graph', 'children'),
+    Input('reset-time-series-graph', 'n_clicks')
+)
+def reset_time_series_graph(btn):
+    changed_id = [p['prop_id'] for p in callback_context.triggered][0]
+    if 'reset-time-series-graph' in changed_id:
+        line = 'Resetting time series graph'
+        print(line)
+        if not testing:
+            controller.init_log_file()
+        else:
+            print('testing button')
+        return html.Div(line)
+
 # fill all cells
 @app.callback(
     Output('container-fill-all-cells-cmd', 'children'),
@@ -190,7 +209,6 @@ def fill_all_cells(btn):
         else:
             print('testing')
         return html.Div(line)
-
 
 # Update live pressure map
 @app.callback(Output('live-pressure-graph', 'figure'),

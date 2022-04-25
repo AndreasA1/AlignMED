@@ -21,7 +21,7 @@ class Controller:
         self.cutoff_pressure = 14.95  # psi
         self.cutoff_time = 10  # seconds
 
-        self.cutoff_pressure_high = 15.3  # psi
+        self.cutoff_pressure_high = 15.5  # psi
 
         # initialize class-level values
         self.n_cells = n_cells
@@ -210,8 +210,10 @@ class Controller:
     '''
 
     def actuate_duration(self, cell_id, state, duration, p_thresh):
-        if p_thresh == "high":
+        if p_thresh == 'high':
             p_limit = self.cutoff_pressure_high
+        elif p_thresh == 'nolim':
+            p_limit = 25
         else:
             p_limit = self.cutoff_pressure
 

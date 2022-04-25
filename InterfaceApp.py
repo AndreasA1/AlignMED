@@ -9,7 +9,7 @@ from time import sleep
 from random import randrange
 
 # testing is false if uploading to rpi
-testing = False
+testing = True
 n_cells = 30
 
 if not testing:
@@ -120,7 +120,8 @@ app.layout = html.Div([
                                 dict(label='Open Outlet', value="2")], value='Open Inlet'),
         dcc.RadioItems(id='pressure-threshold',
                        options=[dict(label='Low', value="low"),
-                                dict(label='High', value="high")], value='low'),
+                                dict(label='High', value="high"),
+                                dict(label='No Limit', value="nolim")], value='low'),
         dcc.Input(id='cell-duration', type='number', placeholder='Command Duration (sec)'),
         html.Br(),
         html.Button('Send Command', id='btn-send-cmd', n_clicks=0),

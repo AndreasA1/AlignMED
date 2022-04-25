@@ -208,21 +208,26 @@ class Controller:
     '''
 
     def actuate_duration(self, cell_id, state, duration):
-        # get solenoid id
+        # get sensor id
+        sensor_id = cell_id-1
+
+        # cell 16 was moved to place 31
         if cell_id == 16:
             cell_id = 31
-        print(f"actuating cell {cell_id}")
         solenoid_id = (cell_id-1)*2 + state
         # get mcp id
         mcp_id = (cell_id-1) // 8
-        print(f"mcp id: {mcp_id}")
         # get mcp pin controlling solenoid
         mcp_pin = (solenoid_id-1) % 16
+
+        print(f"actuating cell {cell_id}")
+        print(f"mcp id: {mcp_id}")
         print(f"mcp_pin: {mcp_pin}")
+
         # set mcp pin to high
         self.mcp_pins[mcp_id][mcp_pin].value = True
         start = time.time()
-        sensor_id = cell_id-1
+
         p_val = self.pressure_val(sensor_id)
         # sleep for the duration while checking for cutoff pressure
         while (p_val < self.cutoff_pressure) and (time.time()-start < duration):
@@ -235,11 +240,15 @@ class Controller:
         return
 
     def actuate_pressure(self, cell_id, pressure):
+        # get sensor id
+        sensor_id = cell_id-1
+
+        #  since cell 16 is messed up
         if cell_id == 16:
             cell_id = 31
         mcp_id = (cell_id-1) // 8
         start = time.time()
-        sensor_id = cell_id-1
+
         # if desired pressure is greater than current pressure
         if pressure > self.pressure_val(sensor_id):  # open inlet
             state = 1

@@ -9,7 +9,7 @@ from time import sleep
 from random import randrange
 
 # testing is false if uploading to rpi
-testing = True
+testing = False
 n_cells = 30
 
 if not testing:
@@ -131,7 +131,7 @@ app.layout = html.Div([
         html.Div(id='container-fill-all-cells-cmd'),
         html.Br(),
         html.Button('Fill Middle Cells', id='fill-middle-cells', n_clicks=0),
-        html.Div(id='container-middle-cells-cmd'),
+        html.Div(id='container-fill-middle-cells-cmd'),
         html.Br(),
         html.Button('Reset Sensor: ', id='btn-reset-sensor', n_clicks=0),
         dcc.Input(id='sensor-id', type='number', placeholder='#'),

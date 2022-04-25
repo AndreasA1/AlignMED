@@ -21,6 +21,8 @@ class Controller:
         self.cutoff_pressure = 14.95  # psi
         self.cutoff_time = 10  # seconds
 
+        self.cutoff_pressure_high = 15.3  # psi
+
         # initialize class-level values
         self.n_cells = n_cells
         self.cell_states = np.zeros(shape=(2*n_cells,))
@@ -207,7 +209,12 @@ class Controller:
         return
     '''
 
-    def actuate_duration(self, cell_id, state, duration):
+    def actuate_duration(self, cell_id, state, duration, p_thresh):
+        if p_thresh == "high":
+            p_limit = self.cutoff_pressure_high
+        else:
+            p_limit = self.cutoff_pressure
+
         # get sensor id
         sensor_id = cell_id-1
 
@@ -230,7 +237,7 @@ class Controller:
 
         p_val = self.pressure_val(sensor_id)
         # sleep for the duration while checking for cutoff pressure
-        while (p_val < self.cutoff_pressure) and (time.time()-start < duration):
+        while (p_val < p_limit) and (time.time()-start < duration):
             sleep(0.1)
             p_val = self.pressure_val(sensor_id)
             print(p_val)

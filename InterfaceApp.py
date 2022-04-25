@@ -118,6 +118,9 @@ app.layout = html.Div([
         dcc.RadioItems(id='cell-state',
                        options=[dict(label='Open Inlet', value="1"),
                                 dict(label='Open Outlet', value="2")], value='Open Inlet'),
+        dcc.RadioItems(id='pressure-threshold',
+                       options=[dict(label='Low', value="low"),
+                                dict(label='High', value="high")], value='low'),
         dcc.Input(id='cell-duration', type='number', placeholder='Command Duration (sec)'),
         html.Br(),
         html.Button('Send Command', id='btn-send-cmd', n_clicks=0),
@@ -144,9 +147,10 @@ app.layout = html.Div([
     Input('cell-id', 'value'),
     Input('cell-state', 'value'),
     Input('cell-duration', 'value'),
-    Input('btn-send-cmd', 'n_clicks')
+    Input('btn-send-cmd', 'n_clicks'),
+    Input('pressure-threshold', 'value')
 )
-def cmd_fun(cell_id, state, duration, btn):
+def cmd_fun(cell_id, state, duration, btn, p_thresh):
     changed_id = [p['prop_id'] for p in callback_context.triggered][0]
     if 'btn-send-cmd' in changed_id:
         if (state == 1) or (state == 'Open Inlet'):
@@ -155,7 +159,7 @@ def cmd_fun(cell_id, state, duration, btn):
             cmd = f"Emptying {cell_id} for {duration} seconds"
         print(cmd)
         if not testing:
-            controller.actuate_duration(int(cell_id), int(state), float(duration))
+            controller.actuate_duration(int(cell_id), int(state), float(duration), str(p_thresh))
         else:
             print(cell_id, state, duration)
         return html.Div(cmd)

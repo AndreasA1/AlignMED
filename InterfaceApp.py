@@ -100,7 +100,7 @@ app.layout = html.Div([
 
         dcc.Interval(
             id='interval-component',
-            interval=3 * 1000,  # in milliseconds
+            interval=5 * 1000,  # in milliseconds
             n_intervals=0),
     ], style={'padding': 10, 'flex': 1}),
 

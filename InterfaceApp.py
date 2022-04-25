@@ -130,6 +130,9 @@ app.layout = html.Div([
         html.Button('Initialization: Fill All Cells', id='fill-all-cells', n_clicks=0),
         html.Div(id='container-fill-all-cells-cmd'),
         html.Br(),
+        html.Button('Fill Middle Cells', id='fill-middle-cells', n_clicks=0),
+        html.Div(id='container-middle-cells-cmd'),
+        html.Br(),
         html.Button('Reset Sensor: ', id='btn-reset-sensor', n_clicks=0),
         dcc.Input(id='sensor-id', type='number', placeholder='#'),
         html.Div(id='container-reset-sensor'),
@@ -213,6 +216,22 @@ def fill_all_cells(btn):
             controller.fill_all_cells()
         else:
             print('testing')
+        return html.Div(line)
+
+# fill middle cells
+@app.callback(
+    Output('container-fill-middle-cells-cmd', 'children'),
+    Input('fill-middle-cells', 'n_clicks')
+)
+def fill_all_cells(btn):
+    changed_id = [p['prop_id'] for p in callback_context.triggered][0]
+    if 'fill-middle-cells' in changed_id:
+        line = 'Filling middle cells'
+        print(line)
+        if not testing:
+            controller.fill_middle_cells()
+        else:
+            print('testing middle cells')
         return html.Div(line)
 
 # Update live pressure map

@@ -23,6 +23,8 @@ class Controller:
 
         self.cutoff_pressure_high = 15.5  # psi
 
+        self.middle_cells = [13, 14, 15, 16, 17, 18]
+
         # initialize class-level values
         self.n_cells = n_cells
         self.cell_states = np.zeros(shape=(2*n_cells,))
@@ -286,6 +288,13 @@ class Controller:
             cell_id = i+1
             if cell_id not in self.broken_sensors:
                 self.actuate_pressure(cell_id, self.cutoff_pressure)
+        return
+
+    def fill_middle_cells(self):
+        for i in self.middle_cells:
+            cell_id = i
+            if cell_id not in self.broken_sensors:
+                self.actuate_pressure(cell_id, self.cutoff_pressure_high)
         return
 
 
